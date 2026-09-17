@@ -1,1 +1,1971 @@
-{"name":"mixpanel-feature-flags"}
+{
+  "NAME": "MIXPANEL-FEATURE-FLAGS",
+  "Name": "MixpanelFeatureFlags",
+  "def": "mixpanel-feature-flags-openapi.yaml",
+  "main": {
+    "api": {
+      "entity": {},
+      "guide": {}
+    },
+    "custom": {
+      "plurals": {}
+    },
+    "def": {
+      "desc": ""
+    },
+    "kit": {
+      "author": {
+        "name": "",
+        "url": ""
+      },
+      "config": {
+        "docs_order": [
+          "ts",
+          "py",
+          "php",
+          "go",
+          "rb",
+          "lua"
+        ],
+        "headers": {
+          "content-type": "application/json"
+        },
+        "repr": "auto"
+      },
+      "contributor": {},
+      "doc": {
+        "active": true,
+        "assets": {
+          "path": ".sdk/doc/assets"
+        },
+        "brand": {
+          "label": "",
+          "notice": "",
+          "shortNotice": "",
+          "url": ""
+        },
+        "ci": {
+          "active": true,
+          "branch": "main"
+        },
+        "content": {
+          "path": ".sdk/doc/content"
+        },
+        "edition": {
+          "github-pages": {
+            "active": true,
+            "base": "node_modules/@voxgig/docgen/project/.sdk",
+            "brand": {},
+            "filter": {
+              "entities": [],
+              "features": [],
+              "targets": []
+            },
+            "kind": "github-pages",
+            "name": "github-pages",
+            "origname": "",
+            "output": {
+              "path": "docs"
+            },
+            "package": "@voxgig/docgen",
+            "site": {
+              "active": true
+            },
+            "style": {},
+            "title": ""
+          },
+          "summary": {
+            "active": true,
+            "base": "node_modules/@voxgig/docgen/project/.sdk",
+            "brand": {},
+            "filter": {
+              "entities": [],
+              "features": [],
+              "targets": []
+            },
+            "kind": "summary",
+            "name": "summary",
+            "origname": "",
+            "output": {
+              "path": "SUMMARY.md"
+            },
+            "package": "@voxgig/docgen",
+            "site": {
+              "active": true
+            },
+            "style": {},
+            "title": ""
+          }
+        },
+        "qa": {
+          "vocabulary": []
+        },
+        "style": {
+          "color": {
+            "accent": "#00c6d8",
+            "background": "#f5f5f9",
+            "darkBackground": "#0f1117",
+            "darkText": "#e6edf3",
+            "primary": "#e70042",
+            "text": "#0a0a0a"
+          },
+          "font": "Nunito, system-ui, sans-serif",
+          "fontFile": "",
+          "headingFont": "Nunito, system-ui, sans-serif",
+          "headingFontFile": "",
+          "logo": "",
+          "mode": "light",
+          "mono": "ui-monospace, monospace",
+          "monoFile": ""
+        },
+        "target": {}
+      },
+      "entity": {
+        "definition": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": [
+            {
+              "active": true,
+              "name": "context",
+              "req": true,
+              "short": "The context variable used for flag evaluation (e.g., distinct_id, device_id)",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "experiment_id",
+              "req": false,
+              "short": "ID of the associated experiment, if any",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "id",
+              "req": true,
+              "short": "Unique identifier for the flag",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "is_experiment_active",
+              "req": false,
+              "short": "Whether the associated experiment is currently active",
+              "type": "`$BOOLEAN`"
+            },
+            {
+              "active": true,
+              "name": "key",
+              "req": true,
+              "short": "Unique key used to reference the flag",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "name",
+              "req": true,
+              "short": "Human-readable name of the flag",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "format": "int32",
+              "name": "project_id",
+              "req": true,
+              "short": "ID of the project this flag belongs to",
+              "type": "`$INTEGER`"
+            },
+            {
+              "active": true,
+              "name": "ruleset",
+              "req": true,
+              "short": "Complete ruleset for a feature flag including variants and rollout configuration",
+              "type": "`$OBJECT`",
+              "union": {
+                "branches": 4,
+                "count": 1,
+                "depth": 5
+              }
+            },
+            {
+              "active": true,
+              "name": "status",
+              "req": true,
+              "short": "Current status of the flag",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "format": "int64",
+              "name": "workspace_id",
+              "req": true,
+              "short": "ID of the workspace (dataview) this flag belongs to",
+              "type": "`$INTEGER`"
+            }
+          ],
+          "id": {
+            "field": "id",
+            "name": "id"
+          },
+          "name": "definition",
+          "op": {
+            "list": {
+              "input": "data",
+              "name": "list",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "query": [
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "project_id",
+                        "orig": "project_id",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "token",
+                        "orig": "token",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /flags/definitions",
+                    "json": "{\"operationId\":\"get-flag-definitions\",\"parameters\":[{\"description\":\"Your project token\",\"in\":\"query\",\"name\":\"token\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"The Mixpanel project_id. Provide if using service account auth.\",\"in\":\"query\",\"name\":\"project_id\",\"required\":false,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Response containing all enabled feature flag definitions\",\"properties\":{\"flags\":{\"description\":\"Array of enabled feature flag definitions\",\"items\":{\"description\":\"Complete metadata for a feature flag\",\"properties\":{\"context\":{\"description\":\"The context variable used for flag evaluation (e.g., distinct_id, device_id)\",\"example\":\"device_id\",\"type\":\"string\"},\"experiment_id\":{\"description\":\"ID of the associated experiment, if any\",\"example\":\"exp_123\",\"type\":\"string\"},\"id\":{\"description\":\"Unique identifier for the flag\",\"example\":\"flag_abc123\",\"type\":\"string\"},\"is_experiment_active\":{\"description\":\"Whether the associated experiment is currently active\",\"example\":true,\"type\":\"boolean\"},\"key\":{\"description\":\"Unique key used to reference the flag\",\"example\":\"new_checkout_flow\",\"type\":\"string\"},\"name\":{\"description\":\"Human-readable name of the flag\",\"example\":\"New Checkout Flow\",\"type\":\"string\"},\"project_id\":{\"description\":\"ID of the project this flag belongs to\",\"example\":12345,\"format\":\"int32\",\"type\":\"integer\"},\"ruleset\":{\"description\":\"Complete ruleset for a feature flag including variants and rollout configuration\",\"properties\":{\"rollout\":{\"description\":\"Array of rollout rules defining how the flag is distributed\",\"items\":{\"description\":\"A rollout rule defining how a flag is distributed to a cohort\",\"properties\":{\"cohort_hash\":{\"description\":\"Hash of the cohort definition for lookup\",\"example\":\"cohort_abc123\",\"type\":\"string\"},\"rollout_percentage\":{\"description\":\"The percentage of the cohort that should receive this flag (0.0 to 1.0)\",\"example\":0.8,\"format\":\"double\",\"type\":\"number\"},\"runtime_evaluation_definition\":{\"additionalProperties\":true,\"deprecated\":true,\"description\":\"Key-value pairs that are evaluated at request time for cohort matching, replaced by the more powerful runtime_evaluation_rule\",\"example\":{\"platform\":\"web\"},\"type\":\"object\"},\"runtime_evaluation_rule\":{\"additionalProperties\":true,\"description\":\"JsonLogic rule that's evaluated at request time based on runtime parameters in the request\",\"example\":{\"platform\":\"web\"},\"type\":\"object\"},\"variant_override\":{\"deprecated\":true,\"description\":\"Override to force a specific variant for a rollout rule (replaced by variant_splits)\",\"properties\":{\"key\":{\"description\":\"The variant key to force\",\"example\":\"treatment\",\"type\":\"string\"}},\"title\":\"VariantOverride\",\"type\":\"object\"},\"variant_splits\":{\"additionalProperties\":{\"format\":\"double\",\"type\":\"number\"},\"description\":\"Dictionary mapping variant keys to their allocation splits within this rollout\",\"example\":{\"control\":0.5,\"treatment\":0.5},\"type\":\"object\"}},\"required\":[\"rollout_percentage\"],\"title\":\"Rollout\",\"type\":\"object\"},\"type\":\"array\"},\"test\":{\"description\":\"Mapping of test users to their assigned variants\",\"properties\":{\"users\":{\"additionalProperties\":{\"type\":\"string\"},\"description\":\"Map of distinct_id to variant_key for QA testing\",\"example\":{\"qa_user_1\":\"treatment\",\"qa_user_2\":\"control\"},\"type\":\"object\"}},\"title\":\"TestUsers\",\"type\":\"object\"},\"variants\":{\"description\":\"Array of variant definitions for this flag\",\"items\":{\"description\":\"A variant definition for a feature flag\",\"properties\":{\"is_control\":{\"description\":\"Whether this is the control variant\",\"example\":false,\"type\":\"boolean\"},\"is_sticky\":{\"description\":\"Whether users should stick to this variant once assigned\",\"example\":true,\"type\":\"boolean\"},\"key\":{\"description\":\"Unique key for this variant\",\"example\":\"treatment\",\"type\":\"string\"},\"split\":{\"description\":\"The proportion of users that should receive this variant (0.0 to 1.0)\",\"example\":0.5,\"format\":\"double\",\"type\":\"number\"},\"value\":{\"description\":\"The value for this variant (can be any type)\",\"example\":true,\"oneOf\":[{\"type\":\"string\"},{\"type\":\"number\"},{\"type\":\"boolean\"},{\"type\":\"object\"}]}},\"required\":[\"key\",\"value\",\"is_control\",\"split\"],\"title\":\"Variant\",\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"variants\",\"rollout\"],\"title\":\"RuleSet\",\"type\":\"object\"},\"status\":{\"description\":\"Current status of the flag\",\"enum\":[\"enabled\",\"disabled\",\"archived\"],\"example\":\"enabled\",\"type\":\"string\"},\"workspace_id\":{\"description\":\"ID of the workspace (dataview) this flag belongs to\",\"example\":67890,\"format\":\"int64\",\"type\":\"integer\"}},\"required\":[\"id\",\"name\",\"key\",\"status\",\"project_id\",\"workspace_id\",\"ruleset\",\"context\"],\"title\":\"ExperimentationFlagMetadata\",\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"flags\"],\"title\":\"FlagDefinitionsResponse\",\"type\":\"object\"}}},\"description\":\"Success\"},\"401\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Standard error response\",\"properties\":{\"error\":{\"description\":\"Details about the error that occurred\",\"type\":\"string\"},\"status\":{\"enum\":[\"error\"],\"type\":\"string\"}},\"title\":\"ErrorResponse\",\"type\":\"object\"}}},\"description\":\"Unauthorized\"},\"403\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Standard error response\",\"properties\":{\"$ref\":\"#/responses/401/content/application~1json/schema/properties\"},\"title\":\"ErrorResponse\",\"type\":\"object\"}}},\"description\":\"Forbidden\"}},\"security\":[{\"ProjectSecret\":[]},{\"ServiceAccount\":[]}],\"securitySchemes\":{\"OAuthToken\":{\"description\":\"OAuth Token\",\"scheme\":\"bearer\",\"type\":\"http\"},\"ProjectSecret\":{\"description\":\"Project Secret\",\"scheme\":\"basic\",\"type\":\"http\"},\"ServiceAccount\":{\"description\":\"Service Account\",\"scheme\":\"basic\",\"type\":\"http\"}},\"securitySource\":\"operation\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/flags/definitions",
+                  "segments": [
+                    {
+                      "lit": "flags"
+                    },
+                    {
+                      "lit": "definitions"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "project_id",
+                      "token"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.flags`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        },
+        "flag": {
+          "active": true,
+          "alias": {
+            "field": {}
+          },
+          "fields": [
+            {
+              "active": true,
+              "name": "experiment_id",
+              "req": false,
+              "short": "The ID of the associated experiment, if any",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "is_experiment_active",
+              "req": false,
+              "short": "Whether the associated experiment is currently active",
+              "type": "`$BOOLEAN`"
+            },
+            {
+              "active": true,
+              "name": "is_qa_tester",
+              "req": false,
+              "short": "Whether the user was identified as a QA tester",
+              "type": "`$BOOLEAN`"
+            },
+            {
+              "active": true,
+              "name": "variant_key",
+              "req": true,
+              "short": "The key of the selected variant",
+              "type": "`$STRING`"
+            },
+            {
+              "active": true,
+              "name": "variant_value",
+              "req": true,
+              "short": "The value of the selected variant (can be any type)",
+              "type": "`$ANY`",
+              "union": {
+                "branches": 4,
+                "count": 1,
+                "depth": 0
+              }
+            }
+          ],
+          "name": "flag",
+          "op": {
+            "load": {
+              "input": "data",
+              "name": "load",
+              "points": [
+                {
+                  "active": true,
+                  "args": {
+                    "query": [
+                      {
+                        "active": true,
+                        "example": "%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22",
+                        "kind": "query",
+                        "name": "context",
+                        "orig": "context",
+                        "reqd": true,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "project_id",
+                        "orig": "project_id",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      },
+                      {
+                        "active": true,
+                        "kind": "query",
+                        "name": "token",
+                        "orig": "token",
+                        "reqd": false,
+                        "type": "`$STRING`"
+                      }
+                    ]
+                  },
+                  "contract": {
+                    "id": "GET /flags",
+                    "json": "{\"operationId\":\"get-variant-assignments\",\"parameters\":[{\"description\":\"Your project token\",\"in\":\"query\",\"name\":\"token\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"The Mixpanel project_id. Provide if using service account auth.\",\"in\":\"query\",\"name\":\"project_id\",\"required\":false,\"schema\":{\"type\":\"string\"}},{\"description\":\"URL-encoded JSON object containing evaluation context with distinct_id (required) and optional device_id and custom_properties object\",\"example\":\"%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22\",\"in\":\"query\",\"name\":\"context\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Response containing evaluated feature flags for the user\",\"properties\":{\"flags\":{\"additionalProperties\":{\"description\":\"The selected variant for a feature flag\",\"properties\":{\"experiment_id\":{\"description\":\"The ID of the associated experiment, if any\",\"example\":\"exp_123\",\"type\":\"string\"},\"is_experiment_active\":{\"description\":\"Whether the associated experiment is currently active\",\"example\":true,\"type\":\"boolean\"},\"is_qa_tester\":{\"description\":\"Whether the user was identified as a QA tester\",\"example\":false,\"type\":\"boolean\"},\"variant_key\":{\"description\":\"The key of the selected variant\",\"example\":\"treatment\",\"type\":\"string\"},\"variant_value\":{\"description\":\"The value of the selected variant (can be any type)\",\"example\":true,\"oneOf\":[{\"type\":\"string\"},{\"type\":\"number\"},{\"type\":\"boolean\"},{\"type\":\"object\"}]}},\"required\":[\"variant_key\",\"variant_value\"],\"title\":\"SelectedVariant\",\"type\":\"object\"},\"description\":\"Map of flag keys to their selected variants\",\"example\":{\"new_checkout_flow\":{\"experiment_id\":\"exp_123\",\"is_experiment_active\":true,\"variant_key\":\"treatment\",\"variant_value\":true}},\"type\":\"object\"}},\"required\":[\"flags\"],\"title\":\"EvaluateFlagsResponse\",\"type\":\"object\"}}},\"description\":\"Success\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Standard error response\",\"properties\":{\"error\":{\"description\":\"Details about the error that occurred\",\"type\":\"string\"},\"status\":{\"enum\":[\"error\"],\"type\":\"string\"}},\"title\":\"ErrorResponse\",\"type\":\"object\"}}},\"description\":\"Bad request\"},\"401\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Standard error response\",\"properties\":{\"$ref\":\"#/responses/400/content/application~1json/schema/properties\"},\"title\":\"ErrorResponse\",\"type\":\"object\"}}},\"description\":\"Unauthorized\"},\"403\":{\"content\":{\"application/json\":{\"schema\":{\"description\":\"Standard error response\",\"properties\":{\"$ref\":\"#/responses/400/content/application~1json/schema/properties\"},\"title\":\"ErrorResponse\",\"type\":\"object\"}}},\"description\":\"Forbidden\"}},\"security\":[{\"ProjectSecret\":[]},{\"ServiceAccount\":[]}],\"securitySchemes\":{\"OAuthToken\":{\"description\":\"OAuth Token\",\"scheme\":\"bearer\",\"type\":\"http\"},\"ProjectSecret\":{\"description\":\"Project Secret\",\"scheme\":\"basic\",\"type\":\"http\"},\"ServiceAccount\":{\"description\":\"Service Account\",\"scheme\":\"basic\",\"type\":\"http\"}},\"securitySource\":\"operation\"}",
+                    "source": "openapi3",
+                    "version": 1
+                  },
+                  "kind": "http",
+                  "method": "GET",
+                  "orig": "/flags",
+                  "segments": [
+                    {
+                      "lit": "flags"
+                    }
+                  ],
+                  "select": {
+                    "exist": [
+                      "context",
+                      "project_id",
+                      "token"
+                    ]
+                  },
+                  "transform": {
+                    "req": "`reqdata`",
+                    "res": "`body.flags`"
+                  }
+                }
+              ]
+            }
+          },
+          "relations": {
+            "ancestors": []
+          }
+        }
+      },
+      "feature": {
+        "debug": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "max": 100,
+              "redact": [
+                "authorization",
+                "cookie",
+                "set-cookie",
+                "api-key",
+                "apikey",
+                "x-api-key",
+                "idempotency-key"
+              ]
+            },
+            "optspec": {
+              "now": "`$FUNCTION`",
+              "onEntry": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreDone": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": true,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "PreUnexpected": {
+              "active": true,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "debug",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Request/response capture ring buffer for debugging",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "idempotency": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "header": "Idempotency-Key",
+              "methods": [
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+              ],
+              "ops": [
+                "create",
+                "update",
+                "remove"
+              ]
+            },
+            "optspec": {
+              "keygen": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "idempotency",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Idempotency keys for safe retries of mutating operations",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "metrics": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false
+            },
+            "optspec": {
+              "now": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreDone": {
+              "active": true,
+              "await": false
+            },
+            "PrePoint": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "PreUnexpected": {
+              "active": true,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "metrics",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Statistics capture: per-operation counters and latency",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "paging": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "afterVar": "after",
+              "cursorParam": "cursor",
+              "firstVar": "first",
+              "limitParam": "limit",
+              "pageParam": "page",
+              "startPage": 1
+            },
+            "optspec": {
+              "limit": "`$NUMBER`",
+              "ops": "`$LIST`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": true,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "paging",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Pagination signals for list operations",
+          "transport": "none",
+          "version": "0.0.1"
+        },
+        "ratelimit": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "burst": 5,
+              "rate": 5
+            },
+            "optspec": {
+              "now": "`$FUNCTION`",
+              "sleep": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "ratelimit",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Client-side rate limiting via a token bucket",
+          "transport": "wrap",
+          "version": "0.0.1"
+        },
+        "retry": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "factor": 2,
+              "maxDelay": 2000,
+              "minDelay": 50,
+              "retries": 2,
+              "statuses": [
+                408,
+                425,
+                429,
+                500,
+                502,
+                503,
+                504
+              ]
+            },
+            "optspec": {
+              "jitter": "`$BOOLEAN`",
+              "sleep": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "retry",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Automatic retry of transient failures with exponential backoff",
+          "transport": "wrap",
+          "version": "0.0.1"
+        },
+        "test": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false
+            },
+            "optspec": {
+              "entity": "`$MAP`",
+              "net": "`$MAP`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": true,
+              "await": false
+            },
+            "GetMatch": {
+              "active": true,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": true,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": true,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PrePoint": {
+              "active": true,
+              "await": false
+            },
+            "PreRequest": {
+              "active": true,
+              "await": false
+            },
+            "PreResponse": {
+              "active": true,
+              "await": false
+            },
+            "PreResult": {
+              "active": true,
+              "await": false
+            },
+            "PreSpec": {
+              "active": true,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": true,
+              "await": false
+            },
+            "SetMatch": {
+              "active": true,
+              "await": false
+            }
+          },
+          "name": "test",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "In-memory mock transport for testing without a live server",
+          "transport": "base",
+          "version": "0.0.1"
+        },
+        "timeout": {
+          "active": true,
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "config": {
+            "options": {
+              "active": false,
+              "ms": 30000
+            },
+            "optspec": {
+              "clearTimer": "`$FUNCTION`",
+              "setTimer": "`$FUNCTION`"
+            },
+            "strict": false
+          },
+          "hook": {
+            "GetData": {
+              "active": false,
+              "await": false
+            },
+            "GetMatch": {
+              "active": false,
+              "await": false
+            },
+            "PostConstruct": {
+              "active": false,
+              "await": false
+            },
+            "PostConstructEntity": {
+              "active": false,
+              "await": false
+            },
+            "PostOperation": {
+              "active": false,
+              "await": false
+            },
+            "PreRequest": {
+              "active": false,
+              "await": false
+            },
+            "PreResponse": {
+              "active": false,
+              "await": false
+            },
+            "PreResult": {
+              "active": false,
+              "await": false
+            },
+            "PreSpec": {
+              "active": false,
+              "await": false
+            },
+            "PreTarget": {
+              "active": false,
+              "await": false
+            },
+            "SetData": {
+              "active": false,
+              "await": false
+            }
+          },
+          "name": "timeout",
+          "needs": {},
+          "origname": "",
+          "package": "@voxgig/sdkgen",
+          "plugin": {},
+          "spec": {},
+          "target": {
+            "go": {
+              "deps": {}
+            },
+            "go-cli": {
+              "deps": {}
+            },
+            "go-mcp": {
+              "deps": {}
+            },
+            "js": {
+              "deps": {}
+            },
+            "lua": {
+              "deps": {}
+            },
+            "php": {
+              "deps": {}
+            },
+            "py": {
+              "deps": {}
+            },
+            "ts": {
+              "deps": {}
+            }
+          },
+          "title": "Per-request timeout with transport abort",
+          "transport": "wrap",
+          "version": "0.0.1"
+        }
+      },
+      "flow": {
+        "BasicDefinitionFlow": {
+          "active": true,
+          "entity": "definition",
+          "key$": "BasicDefinitionFlow",
+          "kind": "basic",
+          "name": "BasicDefinitionFlow",
+          "param": {},
+          "step": [
+            {
+              "active": true,
+              "data": {},
+              "input": {},
+              "match": {},
+              "op": "list",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "ItemExists",
+                  "def": {
+                    "ref": "definition_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "BasicFlagFlow": {
+          "active": true,
+          "entity": "flag",
+          "key$": "BasicFlagFlow",
+          "kind": "basic",
+          "name": "BasicFlagFlow",
+          "param": {},
+          "step": [
+            {
+              "active": true,
+              "data": {},
+              "input": {
+                "ref": "flag_ref01",
+                "srcdatavar": "flag_ref01_data",
+                "suffix": "_dt0"
+              },
+              "match": {},
+              "op": "load",
+              "spec": [],
+              "valid": [
+                {
+                  "apply": "TextFieldMark",
+                  "def": {
+                    "mark": "Mark01-flag_ref01"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "info": {
+        "contact": {
+          "url": "https://mixpanel.com/get-support"
+        },
+        "description": "Use the Feature Flags API to evaluate feature flags for users and retrieve feature flag definitions.",
+        "license": {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        },
+        "security": {
+          "in": "header",
+          "name": "Authorization",
+          "prefix": "Basic",
+          "scheme": "ServiceAccount",
+          "type": "http"
+        },
+        "servers": [
+          {
+            "description": "Mixpanel's feature flags API server.",
+            "url": "https://{regionAndDomain}.com",
+            "variables": {
+              "regionAndDomain": {
+                "default": "api.mixpanel",
+                "description": "The server location to be used:\n* `api.mixpanel` - The default (US) servers used for most projects\n* `api-eu.mixpanel` - EU servers if you are enrolled in EU Data Residency\n* `api-in.mixpanel` - India servers if you are enrolled in India Data Residency\n",
+                "enum": [
+                  "api.mixpanel",
+                  "api-eu.mixpanel",
+                  "api-in.mixpanel"
+                ]
+              }
+            }
+          }
+        ],
+        "summary": "Use the Feature Flags API to evaluate feature flags for users and retrieve feature flag definitions.",
+        "title": "Feature Flags API",
+        "version": "1.0.0",
+        "website": "https://mixpanel.com/get-support"
+      },
+      "option": {},
+      "optspec": {
+        "allow": {
+          "method": "GET,PUT,POST,PATCH,DELETE,OPTIONS",
+          "op": "create,update,load,list,remove,command,direct,graphql"
+        },
+        "apikey": "",
+        "auth": {
+          "basic": false,
+          "in": "",
+          "name": "",
+          "prefix": ""
+        },
+        "base": "http://localhost:8000",
+        "clean": {
+          "keys": "key,token,id"
+        },
+        "entity": {
+          "`$CHILD`": {
+            "`$OPEN`": true,
+            "active": false,
+            "alias": {}
+          }
+        },
+        "extend": "`$ANY`",
+        "headers": {
+          "`$CHILD`": "`$STRING`"
+        },
+        "prefix": "",
+        "secret": "",
+        "server": {
+          "`$CHILD`": ""
+        },
+        "suffix": "",
+        "system": {
+          "fetch": "`$ANY`"
+        },
+        "test": {
+          "active": false,
+          "entity": {
+            "`$OPEN`": true
+          }
+        },
+        "utility": {}
+      },
+      "repo": {
+        "host": "github.com",
+        "path": ""
+      },
+      "target": {
+        "go": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "go",
+          "feature": {
+            "fullset": [
+              "test/feature_test.go"
+            ],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "go",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "",
+              "package": "",
+              "state": "pending",
+              "url": "",
+              "vault": {
+                "alias": "",
+                "env": "",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/runner_test.go",
+            "test/struct_runner_test.go"
+          ],
+          "title": "Golang"
+        },
+        "go-cli": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "go",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "go-cli",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "phase": {
+            "agentguide": {
+              "active": false
+            },
+            "entity": {
+              "active": false
+            },
+            "feature": {
+              "active": false
+            },
+            "readme": {
+              "active": false
+            },
+            "test": {
+              "active": false
+            }
+          },
+          "provides": {},
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "",
+              "package": "",
+              "state": "pending",
+              "url": "",
+              "vault": {
+                "alias": "",
+                "env": "",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "root"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [],
+          "title": "Go CLI"
+        },
+        "go-mcp": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "go",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "go-mcp",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "phase": {
+            "agentguide": {
+              "active": false
+            },
+            "entity": {
+              "active": false
+            },
+            "feature": {
+              "active": false
+            },
+            "readme": {
+              "active": false
+            },
+            "test": {
+              "active": false
+            }
+          },
+          "provides": {},
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "",
+              "package": "",
+              "state": "pending",
+              "url": "",
+              "vault": {
+                "alias": "",
+                "env": "",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "root"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [],
+          "title": "Go MCP server"
+        },
+        "js": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {
+            "dotenv": {
+              "active": true,
+              "kind": "dev",
+              "version": "^17.4.2"
+            }
+          },
+          "ext": "js",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "js",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "npm",
+              "package": "",
+              "state": "pending",
+              "url": "https://registry.npmjs.org",
+              "vault": {
+                "alias": "npm",
+                "env": "",
+                "recipe": "npm"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [
+            "test/runner.js"
+          ],
+          "title": "JavaScript"
+        },
+        "lua": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "--"
+          },
+          "deps": {
+            "dkjson": {
+              "active": true,
+              "kind": "prod",
+              "version": "2.5"
+            }
+          },
+          "ext": "lua",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "lua",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "luarocks",
+              "package": "",
+              "state": "pending",
+              "url": "https://luarocks.org",
+              "vault": {
+                "alias": "luarocks",
+                "env": "LUAROCKS_API_KEY",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/struct_runner.lua"
+          ],
+          "title": "Lua"
+        },
+        "php": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {},
+          "ext": "php",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "php",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "packagist",
+              "package": "",
+              "state": "pending",
+              "url": "https://packagist.org",
+              "vault": {
+                "alias": "packagist",
+                "env": "PACKAGIST_API_TOKEN",
+                "recipe": ""
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/StructRunner.php"
+          ],
+          "title": "PHP"
+        },
+        "py": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "#"
+          },
+          "deps": {
+            "requests": {
+              "active": true,
+              "kind": "prod",
+              "version": "2.33"
+            }
+          },
+          "ext": "py",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "py",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "pypi",
+              "package": "",
+              "state": "pending",
+              "url": "https://pypi.org",
+              "vault": {
+                "alias": "pypi",
+                "env": "",
+                "recipe": "pypi"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "srcfeature": false,
+          "superseded": [
+            "test/struct_runner.py"
+          ],
+          "title": "Python"
+        },
+        "ts": {
+          "active": true,
+          "author": {
+            "name": "",
+            "url": ""
+          },
+          "base": "node_modules/@voxgig/sdkgen/project/.sdk",
+          "comment": {
+            "line": "//"
+          },
+          "deps": {
+            "@types/node": {
+              "active": true,
+              "kind": "dev",
+              "version": "^25.6.0"
+            },
+            "typescript": {
+              "active": true,
+              "kind": "dev",
+              "version": "^5.9.3"
+            }
+          },
+          "ext": "ts",
+          "feature": {
+            "fullset": [],
+            "trim": true
+          },
+          "module": {
+            "goversion": "",
+            "name": "mixpanel-feature-flags",
+            "package": "",
+            "path": ""
+          },
+          "name": "ts",
+          "origname": "",
+          "output": {
+            "adopt": false,
+            "create": true,
+            "path": "",
+            "repo": "",
+            "sdkrel": ""
+          },
+          "package": "@voxgig/sdkgen",
+          "provides": {
+            "schema": true,
+            "sekreto": true
+          },
+          "publish": {
+            "registry": {
+              "active": false,
+              "name": "npm",
+              "package": "",
+              "state": "pending",
+              "url": "https://registry.npmjs.org",
+              "vault": {
+                "alias": "npm",
+                "env": "",
+                "recipe": "npm"
+              }
+            },
+            "tag": {
+              "active": true,
+              "prefix": "",
+              "vault": {
+                "alias": "github",
+                "recipe": "github"
+              },
+              "via": "port"
+            },
+            "version": "0.0.1"
+          },
+          "superseded": [
+            "test/runner.ts",
+            "test/vendor/omni/compat.ts",
+            "src/feature/secrets/sekreto/Providers.ts",
+            "src/feature/secrets/sekreto/Sigv4.ts",
+            "src/feature/secrets/sekreto/provider/Registry.ts",
+            "src/feature/secrets/sekreto/provider/http.ts"
+          ],
+          "title": "TypeScript"
+        }
+      },
+      "test": {
+        "live": {
+          "app": false,
+          "base": "",
+          "strict": true
+        }
+      }
+    }
+  },
+  "name": "mixpanel-feature-flags",
+  "name-": "mixpanel-feature-flags",
+  "name_": "mixpanel_feature_flags",
+  "name__orig": "mixpanel-feature-flags",
+  "origin": "voxgig-sdk"
+}

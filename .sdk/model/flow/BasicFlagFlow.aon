@@ -1,0 +1,28 @@
+# BasicFlagFlow
+
+main: kit: flow: BasicFlagFlow:
+{
+  entity: "flag",
+  kind: "basic",
+  name: "BasicFlagFlow",
+  step: [
+    {
+      input: {
+        ref: "flag_ref01",
+        srcdatavar: "flag_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-flag_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicFlagFlow"
+}

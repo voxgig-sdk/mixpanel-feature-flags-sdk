@@ -1,0 +1,50 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      contact: {
+        url: "https://mixpanel.com/get-support"
+      }
+      description: "Use the Feature Flags API to evaluate feature flags for users and retrieve feature flag definitions."
+      license: {
+        name: "MIT"
+        url: "https://opensource.org/licenses/MIT"
+      }
+      security: {
+        in: "header"
+        name: "Authorization"
+        prefix: "Basic"
+        scheme: "ServiceAccount"
+        type: "http"
+      }
+      servers: [
+        {
+          description: "Mixpanel's feature flags API server."
+          url: "https://{regionAndDomain}.com"
+          variables: {
+            regionAndDomain: {
+              default: "api.mixpanel"
+              description: `The server location to be used:
+* \`api.mixpanel\` - The default (US) servers used for most projects
+* \`api-eu.mixpanel\` - EU servers if you are enrolled in EU Data Residency
+* \`api-in.mixpanel\` - India servers if you are enrolled in India Data Residency
+`
+              enum: [
+                "api.mixpanel"
+                "api-eu.mixpanel"
+                "api-in.mixpanel"
+              ]
+            }
+          }
+        }
+      ]
+      summary: "Use the Feature Flags API to evaluate feature flags for users and retrieve feature flag definitions."
+      title: "Feature Flags API"
+      version: "1.0.0"
+      website: "https://mixpanel.com/get-support"
+    }
+  }
+}
+

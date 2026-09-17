@@ -1,0 +1,4 @@
+/dist/
+/mixpanel-feature-flags-cli
+/go-cli
+.jostraca/

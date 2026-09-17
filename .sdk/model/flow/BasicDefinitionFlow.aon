@@ -1,0 +1,22 @@
+# BasicDefinitionFlow
+
+main: kit: flow: BasicDefinitionFlow:
+{
+  entity: "definition",
+  kind: "basic",
+  name: "BasicDefinitionFlow",
+  step: [
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "definition_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicDefinitionFlow"
+}

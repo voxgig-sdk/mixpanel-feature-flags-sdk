@@ -1,0 +1,39 @@
+
+import type {
+  ModelEntity
+} from '@voxgig/apidef'
+
+import { cmp, each, Folder, entityCollection,
+  TestControl } from '@voxgig/sdkgen'
+
+
+import { TestLive } from './TestLive_js'
+import { TestDirect } from './TestDirect_js'
+import { TestEntity } from './TestEntity_js'
+
+
+const Test = cmp(function Test(props: any) {
+  const { model, stdrep } = props.ctx$
+  const { target } = props
+
+  Folder({ name: 'test' }, () => {
+
+    // Write-once: a project's edited control file survives regeneration.
+    TestControl({ target, dir: 'test' })
+    TestLive({ target })
+
+    Folder({ name: 'entity' }, () => {
+      const entity = each(entityCollection(model))
+        .filter((e: any) => false !== e.active)
+      each(entity, (entity: ModelEntity) => {
+        TestEntity({ target, entity })
+        TestDirect({ target, entity })
+      })
+    })
+  })
+})
+
+
+export {
+  Test
+}

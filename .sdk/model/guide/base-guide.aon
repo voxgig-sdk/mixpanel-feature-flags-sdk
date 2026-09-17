@@ -1,0 +1,22 @@
+# Guide
+
+guide: {
+  metrics: count: entity: 2
+  metrics: count: path: 2
+  metrics: count: method: 2
+
+  entity: definition: {
+    path: "/flags/definitions": {
+      op: list: method: *GET
+      op: list: transform: res: *("`body.flags`")|top
+    }
+  }
+
+  entity: flag: {
+    path: "/flags": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.flags`")|top
+    }
+  }
+
+}

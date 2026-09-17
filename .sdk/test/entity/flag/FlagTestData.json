@@ -1,0 +1,240 @@
+{
+  "existing": {
+    "flag": {
+      "FLAG00": {
+        "experiment_id": "EXPERIMENT01",
+        "is_experiment_active": false,
+        "is_qa_tester": true,
+        "variant_key": "s35",
+        "variant_value": "s36",
+        "id": "FLAG00"
+      },
+      "FLAG01": {
+        "experiment_id": "EXPERIMENT01",
+        "is_experiment_active": false,
+        "is_qa_tester": true,
+        "variant_key": "s67",
+        "variant_value": "s68",
+        "id": "FLAG01"
+      },
+      "FLAG02": {
+        "experiment_id": "EXPERIMENT01",
+        "is_experiment_active": false,
+        "is_qa_tester": true,
+        "variant_key": "s99",
+        "variant_value": "s9a",
+        "id": "FLAG02"
+      }
+    }
+  },
+  "new": {
+    "flag": {
+      "flag_ref01": {
+        "experiment_id": "EXPERIMENT01",
+        "is_experiment_active": false,
+        "is_qa_tester": true,
+        "variant_key": "scb",
+        "variant_value": "scc"
+      }
+    }
+  },
+  "requests": {
+    "GET /flags": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "get-variant-assignments",
+        "parameters": [
+          {
+            "description": "Your project token",
+            "in": "query",
+            "name": "token",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The Mixpanel project_id. Provide if using service account auth.",
+            "in": "query",
+            "name": "project_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "URL-encoded JSON object containing evaluation context with distinct_id (required) and optional device_id and custom_properties object",
+            "example": "%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22",
+            "in": "query",
+            "name": "context",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Response containing evaluated feature flags for the user",
+                  "properties": {
+                    "flags": {
+                      "additionalProperties": {
+                        "description": "The selected variant for a feature flag",
+                        "properties": {
+                          "experiment_id": {
+                            "description": "The ID of the associated experiment, if any",
+                            "example": "exp_123",
+                            "type": "string"
+                          },
+                          "is_experiment_active": {
+                            "description": "Whether the associated experiment is currently active",
+                            "example": true,
+                            "type": "boolean"
+                          },
+                          "is_qa_tester": {
+                            "description": "Whether the user was identified as a QA tester",
+                            "example": false,
+                            "type": "boolean"
+                          },
+                          "variant_key": {
+                            "description": "The key of the selected variant",
+                            "example": "treatment",
+                            "type": "string"
+                          },
+                          "variant_value": {
+                            "description": "The value of the selected variant (can be any type)",
+                            "example": true,
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "object"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "variant_key",
+                          "variant_value"
+                        ],
+                        "title": "SelectedVariant",
+                        "type": "object"
+                      },
+                      "description": "Map of flag keys to their selected variants",
+                      "example": {
+                        "new_checkout_flow": {
+                          "experiment_id": "exp_123",
+                          "is_experiment_active": true,
+                          "variant_key": "treatment",
+                          "variant_value": true
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "flags"
+                  ],
+                  "title": "EvaluateFlagsResponse",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Standard error response",
+                  "properties": {
+                    "error": {
+                      "description": "Details about the error that occurred",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "error"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "title": "ErrorResponse",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Standard error response",
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "title": "ErrorResponse",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Standard error response",
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "title": "ErrorResponse",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "ProjectSecret": []
+          },
+          {
+            "ServiceAccount": []
+          }
+        ],
+        "securitySchemes": {
+          "OAuthToken": {
+            "description": "OAuth Token",
+            "scheme": "bearer",
+            "type": "http"
+          },
+          "ProjectSecret": {
+            "description": "Project Secret",
+            "scheme": "basic",
+            "type": "http"
+          },
+          "ServiceAccount": {
+            "description": "Service Account",
+            "scheme": "basic",
+            "type": "http"
+          }
+        },
+        "securitySource": "operation"
+      }
+    }
+  }
+}
