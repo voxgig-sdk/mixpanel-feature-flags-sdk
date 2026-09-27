@@ -1,0 +1,112 @@
+# Entity: flag
+
+main: kit: entity: flag: {
+
+  alias: field: {}
+
+  fields: {
+    experiment_id: {
+      h: "Experiment Id"
+      n: "experiment_id"
+      r: false
+      sh: "The ID of the associated experiment, if any"
+      t: "`$STRING`"
+    }
+    is_experiment_active: {
+      h: "Is Experiment Active"
+      n: "is_experiment_active"
+      r: false
+      sh: "Whether the associated experiment is currently active"
+      t: "`$BOOLEAN`"
+    }
+    is_qa_tester: {
+      h: "Is Qa Tester"
+      n: "is_qa_tester"
+      r: false
+      sh: "Whether the user was identified as a QA tester"
+      t: "`$BOOLEAN`"
+    }
+    variant_key: {
+      h: "Variant Key"
+      n: "variant_key"
+      r: true
+      sh: "The key of the selected variant"
+      t: "`$STRING`"
+    }
+    variant_value: {
+      h: "Variant Value"
+      n: "variant_value"
+      r: true
+      sh: "The value of the selected variant (can be any type)"
+      t: "`$ANY`"
+      union: {
+        branches: 4
+        count: 1
+        depth: 0
+      }
+    }
+  }
+
+  name: "flag"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /flags"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22"
+                k: "query"
+                n: "context"
+                or: "context"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "project_id"
+                or: "project_id"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "token"
+                or: "token"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/flags"
+          q: {
+            exist: [
+              "context"
+              "project_id"
+              "token"
+            ]
+          }
+          s: [
+            {
+              lit: "flags"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.flags`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

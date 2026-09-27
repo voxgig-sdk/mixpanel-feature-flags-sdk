@@ -9,18 +9,6 @@ import (
 	sdk "github.com/voxgig-sdk/mixpanel-feature-flags-sdk/go"
 )
 
-// registerSDKWords installs three native boru words bound to the SDK:
-// list / load / update. Each is declared with two overloads matching
-// the signature  [query?:(Node or Scalar) entity:atom]:
-//
-//   [entity:Atom]            — no query (e.g. `list book`)
-//   [query:Any entity:Atom]  — query is any Node or Scalar (e.g.
-//                              `load {id:1} book`, `load 1 book`)
-//
-// The entity slot is /q-quoted so a bareword `book` parses as the
-// Atom "book" rather than dispatching as an undefined word. Both
-// overloads are all-forward (BarrierAllForward), so args are collected
-// from the tokens following the word.
 func registerSDKWords(r *eng.Registry, client *sdk.MixpanelFeatureFlagsSDK) {
 	for _, op := range []string{"list", "load", "update"} {
 		op := op
@@ -89,10 +77,10 @@ func runOp(client *sdk.MixpanelFeatureFlagsSDK, op string, query *eng.Value, ent
 // emits one `case "<name>":` per entity defined in the SDK model.
 func entityFor(client *sdk.MixpanelFeatureFlagsSDK, name string) (sdk.MixpanelFeatureFlagsEntity, error) {
 	switch strings.ToLower(name) {
-	case "definition":
-		return client.Definition(nil), nil
 	case "flag":
 		return client.Flag(nil), nil
+	case "get_flag_definition":
+		return client.GetFlagDefinition(nil), nil
 
 	}
 	return nil, fmt.Errorf("unknown entity %q", name)

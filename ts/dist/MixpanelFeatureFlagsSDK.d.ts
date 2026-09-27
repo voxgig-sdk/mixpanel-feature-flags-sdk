@@ -1,5 +1,5 @@
-import { DefinitionEntity } from './entity/DefinitionEntity';
 import { FlagEntity } from './entity/FlagEntity';
+import { GetFlagDefinitionEntity } from './entity/GetFlagDefinitionEntity';
 export type * from './MixpanelFeatureFlagsTypes';
 import { inspect } from 'node:util';
 import type { Context, Feature } from './types';
@@ -45,8 +45,8 @@ declare class MixpanelFeatureFlagsSDK {
         data?: undefined;
     }>;
     graphql(query: string, variables?: any, ctrl?: any): Promise<any>;
-    Definition(entopts?: Record<string, any>): DefinitionEntity;
     Flag(entopts?: Record<string, any>): FlagEntity;
+    GetFlagDefinition(entopts?: Record<string, any>): GetFlagDefinitionEntity;
     static test(testoptsarg?: any, sdkoptsarg?: any): MixpanelFeatureFlagsSDK;
     tester(testopts?: any, sdkopts?: any): MixpanelFeatureFlagsSDK;
     toJSON(): {

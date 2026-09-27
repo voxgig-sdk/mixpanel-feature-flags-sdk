@@ -19,15 +19,15 @@ make build
 export MIXPANEL_FEATURE_FLAGS_APIKEY=sk_live_xxx
 
 # 4. Each command line is ONE boru expression, run against the API:
-./mixpanel-feature-flags-cli list definition
-./mixpanel-feature-flags-cli list flag
+./mixpanel-feature-flags-cli load 1 flag            # {id:1} shorthand
+./mixpanel-feature-flags-cli load '{id:1}' flag       # explicit match map
 
 # 5. Override the API base URL for a single call
-MIXPANEL_FEATURE_FLAGS_BASE=https://api.example.com ./mixpanel-feature-flags-cli list definition
+MIXPANEL_FEATURE_FLAGS_BASE=https://api.example.com ./mixpanel-feature-flags-cli load 1 flag
 
 # 6. No arguments -> interactive REPL
 ./mixpanel-feature-flags-cli
-mixpanel-feature-flags> list definition
+mixpanel-feature-flags> load 1 flag
 mixpanel-feature-flags> /quit
 ```
 
@@ -53,7 +53,7 @@ mixpanel-feature-flags> /quit
    arguments to open the REPL):
 
    ```sh
-   ./dist/*/mixpanel-feature-flags-cli list definition
+   ./dist/*/mixpanel-feature-flags-cli load 1 flag
    ```
 
 4. **Go interactive.** Run the binary with no arguments to open the REPL, then
@@ -63,14 +63,15 @@ That is the whole loop: *build → set key → evaluate boru expressions*.
 
 ## How-to guides
 
-### List the records of an entity
+### Load a single record
 
 ```sh
-./mixpanel-feature-flags-cli list definition
+./mixpanel-feature-flags-cli load 1 flag          # scalar shorthand for {id:1}
+./mixpanel-feature-flags-cli load '{id:1}' flag     # explicit match map
 ```
 
-`list <entity>` returns the first page of records. `<entity>` is a bareword —
-it is auto-quoted as an boru atom, so no quotes are needed.
+The query is either a **scalar** (`1`, treated as `{id:1}`) or a **match map**
+(`{id:1}`, `{slug:"acme"}`). Quote the map so your shell passes it through intact.
 
 ### Authenticate and choose an environment
 
@@ -79,7 +80,7 @@ Configuration is read from the environment — nothing is written to disk:
 ```sh
 export MIXPANEL_FEATURE_FLAGS_APIKEY=sk_live_xxx            # API key
 export MIXPANEL_FEATURE_FLAGS_BASE=https://api.example.com  # optional: override the API base URL
-./mixpanel-feature-flags-cli list definition
+./mixpanel-feature-flags-cli load 1 flag
 ```
 
 Both are injectable by a secrets vault, so the key never has to be typed inline.
@@ -91,7 +92,7 @@ evaluated as its own boru expression:
 
 ```text
 $ ./mixpanel-feature-flags-cli
-mixpanel-feature-flags> list definition
+mixpanel-feature-flags> load 1 flag
 mixpanel-feature-flags> /help
 mixpanel-feature-flags> /quit
 ```
@@ -119,7 +120,7 @@ The CLI registers these boru words, each bound to the SDK:
 | `list`   | `list <entity>` · `list <query> <entity>`     | First page of records          |
 | `load`   | `load <entity>` · `load <query> <entity>`     | A single record                |
 
-- `<entity>` is a bareword, auto-quoted as an boru atom (e.g. `definition`).
+- `<entity>` is a bareword, auto-quoted as an boru atom (e.g. `flag`).
 - `<query>` is either a **Map** (`{id:1}`) or a **Scalar** (`1`, treated as
   `{id:1}`). A scalar is always wrapped as `{id:<value>}`.
 
@@ -162,7 +163,7 @@ Meta-commands use the `/` prefix (everything else on a line is evaluated as boru
 
 The 2 entities this SDK exposes (any is valid as `<entity>`):
 
-definition flag
+flag get_flag_definition
 
 ## Explanation
 

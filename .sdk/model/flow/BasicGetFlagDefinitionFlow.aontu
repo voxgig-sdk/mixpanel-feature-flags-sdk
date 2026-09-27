@@ -1,0 +1,22 @@
+# BasicGetFlagDefinitionFlow
+
+main: kit: flow: BasicGetFlagDefinitionFlow:
+{
+  entity: "get_flag_definition",
+  kind: "basic",
+  name: "BasicGetFlagDefinitionFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "get_flag_definition_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicGetFlagDefinitionFlow"
+}

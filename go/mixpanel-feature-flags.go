@@ -53,11 +53,11 @@ func init() {
 	core.NewTimeoutFeatureFunc = func() core.Feature {
 		return feature.NewTimeoutFeature()
 	}
-	core.NewDefinitionEntityFunc = func(client *core.MixpanelFeatureFlagsSDK, entopts map[string]any) core.MixpanelFeatureFlagsEntity {
-		return entity.NewDefinitionEntity(client, entopts)
-	}
 	core.NewFlagEntityFunc = func(client *core.MixpanelFeatureFlagsSDK, entopts map[string]any) core.MixpanelFeatureFlagsEntity {
 		return entity.NewFlagEntity(client, entopts)
+	}
+	core.NewGetFlagDefinitionEntityFunc = func(client *core.MixpanelFeatureFlagsSDK, entopts map[string]any) core.MixpanelFeatureFlagsEntity {
+		return entity.NewGetFlagDefinitionEntity(client, entopts)
 	}
 }
 

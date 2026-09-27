@@ -159,106 +159,192 @@ func MakeConfig() map[string]any {
 				"content-type": "application/json",
 			},
 			"entity": map[string]any{
-				"definition": map[string]any{},
 				"flag": map[string]any{},
+				"get_flag_definition": map[string]any{},
 			},
 		},
 		"entity": map[string]any{
-			"definition": map[string]any{
+			"flag": map[string]any{
 				"fields": []any{
 					map[string]any{
-						"name": "context",
-						"req": true,
-						"short": "The context variable used for flag evaluation (e.g., distinct_id, device_id)",
-						"type": "`$STRING`",
-					},
-					map[string]any{
 						"name": "experiment_id",
-						"short": "ID of the associated experiment, if any",
+						"title": "Experiment Id",
 						"type": "`$STRING`",
-					},
-					map[string]any{
-						"name": "id",
-						"req": true,
-						"short": "Unique identifier for the flag",
-						"type": "`$STRING`",
+						"short": "The ID of the associated experiment, if any",
 					},
 					map[string]any{
 						"name": "is_experiment_active",
-						"short": "Whether the associated experiment is currently active",
+						"title": "Is Experiment Active",
 						"type": "`$BOOLEAN`",
+						"short": "Whether the associated experiment is currently active",
+					},
+					map[string]any{
+						"name": "is_qa_tester",
+						"title": "Is Qa Tester",
+						"type": "`$BOOLEAN`",
+						"short": "Whether the user was identified as a QA tester",
+					},
+					map[string]any{
+						"name": "variant_key",
+						"title": "Variant Key",
+						"type": "`$STRING`",
+						"req": true,
+						"short": "The key of the selected variant",
+					},
+					map[string]any{
+						"name": "variant_value",
+						"title": "Variant Value",
+						"type": "`$ANY`",
+						"req": true,
+						"short": "The value of the selected variant (can be any type)",
+					},
+				},
+				"name": "flag",
+				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/flags",
+								"segments": []any{
+									map[string]any{
+										"lit": "flags",
+									},
+								},
+								"parts": []any{
+									"flags",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.flags`",
+								},
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"name": "context",
+											"orig": "context",
+											"type": "`$STRING`",
+											"kind": "query",
+											"reqd": true,
+											"example": "%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22",
+										},
+										map[string]any{
+											"name": "project_id",
+											"orig": "project_id",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "token",
+											"orig": "token",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"context",
+										"project_id",
+										"token",
+									},
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"get_flag_definition": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "context",
+						"title": "Context",
+						"type": "`$STRING`",
+						"req": true,
+						"short": "The context variable used for flag evaluation (e.g., distinct_id, device_id)",
+					},
+					map[string]any{
+						"name": "experiment_id",
+						"title": "Experiment Id",
+						"type": "`$STRING`",
+						"short": "ID of the associated experiment, if any",
+					},
+					map[string]any{
+						"name": "id",
+						"title": "Id",
+						"type": "`$STRING`",
+						"req": true,
+						"short": "Unique identifier for the flag",
+					},
+					map[string]any{
+						"name": "is_experiment_active",
+						"title": "Is Experiment Active",
+						"type": "`$BOOLEAN`",
+						"short": "Whether the associated experiment is currently active",
 					},
 					map[string]any{
 						"name": "key",
+						"title": "Key",
+						"type": "`$STRING`",
 						"req": true,
 						"short": "Unique key used to reference the flag",
-						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "name",
+						"title": "Name",
+						"type": "`$STRING`",
 						"req": true,
 						"short": "Human-readable name of the flag",
-						"type": "`$STRING`",
 					},
 					map[string]any{
-						"format": "int32",
 						"name": "project_id",
+						"title": "Project Id",
+						"type": "`$INTEGER`",
 						"req": true,
 						"short": "ID of the project this flag belongs to",
-						"type": "`$INTEGER`",
+						"format": "int32",
 					},
 					map[string]any{
 						"name": "ruleset",
+						"title": "Ruleset",
+						"type": "`$OBJECT`",
 						"req": true,
 						"short": "Complete ruleset for a feature flag including variants and rollout configuration",
-						"type": "`$OBJECT`",
-						"union": map[string]any{
-							"branches": 4,
-							"count": 1,
-							"depth": 5,
-						},
 					},
 					map[string]any{
 						"name": "status",
+						"title": "Status",
+						"type": "`$STRING`",
 						"req": true,
 						"short": "Current status of the flag",
-						"type": "`$STRING`",
 					},
 					map[string]any{
-						"format": "int64",
 						"name": "workspace_id",
+						"title": "Workspace Id",
+						"type": "`$INTEGER`",
 						"req": true,
 						"short": "ID of the workspace (dataview) this flag belongs to",
-						"type": "`$INTEGER`",
+						"format": "int64",
 					},
 				},
 				"id": map[string]any{
 					"field": "id",
 					"name": "id",
 				},
-				"name": "definition",
+				"name": "get_flag_definition",
 				"op": map[string]any{
 					"list": map[string]any{
 						"input": "data",
 						"name": "list",
 						"points": []any{
 							map[string]any{
-								"args": map[string]any{
-									"query": []any{
-										map[string]any{
-											"kind": "query",
-											"name": "project_id",
-											"orig": "project_id",
-											"type": "`$STRING`",
-										},
-										map[string]any{
-											"kind": "query",
-											"name": "token",
-											"orig": "token",
-											"type": "`$STRING`",
-										},
-									},
-								},
 								"kind": "http",
 								"method": "GET",
 								"orig": "/flags/definitions",
@@ -270,115 +356,36 @@ func MakeConfig() map[string]any {
 										"lit": "definitions",
 									},
 								},
-								"select": map[string]any{
-									"exist": []any{
-										"project_id",
-										"token",
-									},
-								},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body.flags`",
-								},
 								"parts": []any{
 									"flags",
 									"definitions",
 								},
-							},
-						},
-					},
-				},
-				"relations": map[string]any{
-					"ancestors": []any{},
-				},
-			},
-			"flag": map[string]any{
-				"fields": []any{
-					map[string]any{
-						"name": "experiment_id",
-						"short": "The ID of the associated experiment, if any",
-						"type": "`$STRING`",
-					},
-					map[string]any{
-						"name": "is_experiment_active",
-						"short": "Whether the associated experiment is currently active",
-						"type": "`$BOOLEAN`",
-					},
-					map[string]any{
-						"name": "is_qa_tester",
-						"short": "Whether the user was identified as a QA tester",
-						"type": "`$BOOLEAN`",
-					},
-					map[string]any{
-						"name": "variant_key",
-						"req": true,
-						"short": "The key of the selected variant",
-						"type": "`$STRING`",
-					},
-					map[string]any{
-						"name": "variant_value",
-						"req": true,
-						"short": "The value of the selected variant (can be any type)",
-						"type": "`$ANY`",
-						"union": map[string]any{
-							"branches": 4,
-							"count": 1,
-							"depth": 0,
-						},
-					},
-				},
-				"name": "flag",
-				"op": map[string]any{
-					"load": map[string]any{
-						"input": "data",
-						"name": "load",
-						"points": []any{
-							map[string]any{
-								"args": map[string]any{
-									"query": []any{
-										map[string]any{
-											"example": "%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22",
-											"kind": "query",
-											"name": "context",
-											"orig": "context",
-											"reqd": true,
-											"type": "`$STRING`",
-										},
-										map[string]any{
-											"kind": "query",
-											"name": "project_id",
-											"orig": "project_id",
-											"type": "`$STRING`",
-										},
-										map[string]any{
-											"kind": "query",
-											"name": "token",
-											"orig": "token",
-											"type": "`$STRING`",
-										},
-									},
-								},
-								"kind": "http",
-								"method": "GET",
-								"orig": "/flags",
-								"segments": []any{
-									map[string]any{
-										"lit": "flags",
-									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"context",
-										"project_id",
-										"token",
-									},
-								},
+								"rename": map[string]any{},
 								"transform": map[string]any{
 									"req": "`reqdata`",
 									"res": "`body.flags`",
 								},
-								"parts": []any{
-									"flags",
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"name": "project_id",
+											"orig": "project_id",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+										map[string]any{
+											"name": "token",
+											"orig": "token",
+											"type": "`$STRING`",
+											"kind": "query",
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"project_id",
+										"token",
+									},
 								},
 							},
 						},

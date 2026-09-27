@@ -129,44 +129,92 @@ declare class Config {
             "content-type": string;
         };
         entity: {
-            definition: {};
             flag: {};
+            get_flag_definition: {};
         };
     };
     entity: {
-        definition: {
+        flag: {
             fields: ({
                 name: string;
-                req: boolean;
-                short: string;
+                title: string;
                 type: string;
-                format?: undefined;
-                union?: undefined;
+                short: string;
+                req?: undefined;
             } | {
                 name: string;
-                short: string;
+                title: string;
                 type: string;
+                req: boolean;
+                short: string;
+            })[];
+            name: string;
+            op: {
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        parts: string[];
+                        rename: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        args: {
+                            query: ({
+                                name: string;
+                                orig: string;
+                                type: string;
+                                kind: string;
+                                reqd: boolean;
+                                example: string;
+                            } | {
+                                name: string;
+                                orig: string;
+                                type: string;
+                                kind: string;
+                                reqd?: undefined;
+                                example?: undefined;
+                            })[];
+                        };
+                        select: {
+                            exist: string[];
+                        };
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        get_flag_definition: {
+            fields: ({
+                name: string;
+                title: string;
+                type: string;
+                req: boolean;
+                short: string;
+                format?: undefined;
+            } | {
+                name: string;
+                title: string;
+                type: string;
+                short: string;
                 req?: undefined;
                 format?: undefined;
-                union?: undefined;
             } | {
+                name: string;
+                title: string;
+                type: string;
+                req: boolean;
+                short: string;
                 format: string;
-                name: string;
-                req: boolean;
-                short: string;
-                type: string;
-                union?: undefined;
-            } | {
-                name: string;
-                req: boolean;
-                short: string;
-                type: string;
-                union: {
-                    branches: number;
-                    count: number;
-                    depth: number;
-                };
-                format?: undefined;
             })[];
             id: {
                 field: string;
@@ -178,96 +226,29 @@ declare class Config {
                     input: string;
                     name: string;
                     points: {
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        parts: string[];
+                        rename: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
                         args: {
                             query: {
-                                kind: string;
                                 name: string;
                                 orig: string;
                                 type: string;
+                                kind: string;
                             }[];
                         };
-                        kind: string;
-                        method: string;
-                        orig: string;
-                        segments: {
-                            lit: string;
-                        }[];
                         select: {
                             exist: string[];
                         };
-                        transform: {
-                            req: string;
-                            res: string;
-                        };
-                        parts: string[];
-                    }[];
-                };
-            };
-            relations: {
-                ancestors: never[];
-            };
-        };
-        flag: {
-            fields: ({
-                name: string;
-                short: string;
-                type: string;
-                req?: undefined;
-                union?: undefined;
-            } | {
-                name: string;
-                req: boolean;
-                short: string;
-                type: string;
-                union?: undefined;
-            } | {
-                name: string;
-                req: boolean;
-                short: string;
-                type: string;
-                union: {
-                    branches: number;
-                    count: number;
-                    depth: number;
-                };
-            })[];
-            name: string;
-            op: {
-                load: {
-                    input: string;
-                    name: string;
-                    points: {
-                        args: {
-                            query: ({
-                                example: string;
-                                kind: string;
-                                name: string;
-                                orig: string;
-                                reqd: boolean;
-                                type: string;
-                            } | {
-                                kind: string;
-                                name: string;
-                                orig: string;
-                                type: string;
-                                example?: undefined;
-                                reqd?: undefined;
-                            })[];
-                        };
-                        kind: string;
-                        method: string;
-                        orig: string;
-                        segments: {
-                            lit: string;
-                        }[];
-                        select: {
-                            exist: string[];
-                        };
-                        transform: {
-                            req: string;
-                            res: string;
-                        };
-                        parts: string[];
                     }[];
                 };
             };

@@ -41,13 +41,13 @@ local client = sdk.test()
 
 ### Instance Methods
 
-#### `Definition(data)`
-
-Create a new `Definition` entity instance. Pass `nil` for no initial data.
-
 #### `Flag(data)`
 
 Create a new `Flag` entity instance. Pass `nil` for no initial data.
+
+#### `GetFlagDefinition(data)`
+
+Create a new `GetFlagDefinition` entity instance. Pass `nil` for no initial data.
 
 #### `options_map() -> table`
 
@@ -81,67 +81,6 @@ Prepare a fetch definition without sending the request. Accepts the
 same parameters as `direct()`.
 
 **Returns:** `table, err`
-
-
----
-
-## DefinitionEntity
-
-```lua
-local definition = client:Definition(nil)
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `context` | `string` | Yes | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
-| `experiment_id` | `string` | No | ID of the associated experiment, if any |
-| `id` | `string` | Yes | Unique identifier for the flag |
-| `is_experiment_active` | `boolean` | No | Whether the associated experiment is currently active |
-| `key` | `string` | Yes | Unique key used to reference the flag |
-| `name` | `string` | Yes | Human-readable name of the flag |
-| `project_id` | `number` | Yes | ID of the project this flag belongs to |
-| `ruleset` | `table` | Yes | Complete ruleset for a feature flag including variants and rollout configuration |
-| `status` | `string` | Yes | Current status of the flag |
-| `workspace_id` | `number` | Yes | ID of the workspace (dataview) this flag belongs to |
-
-### Operations
-
-#### `list(reqmatch, ctrl) -> any, err`
-
-List entities matching the given criteria. Returns an array.
-
-```lua
-local results, err = client:Definition():list()
-```
-
-### Common Methods
-
-#### `data_get() -> table`
-
-Get the entity data. Returns a copy of the current data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> table`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `DefinitionEntity` instance with the same client and
-options.
-
-#### `get_name() -> string`
-
-Return the entity name.
 
 
 ---
@@ -202,18 +141,79 @@ Return the entity name.
 
 ---
 
+## GetFlagDefinitionEntity
+
+```lua
+local get_flag_definition = client:GetFlagDefinition(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `context` | `string` | Yes | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
+| `experiment_id` | `string` | No | ID of the associated experiment, if any |
+| `id` | `string` | Yes | Unique identifier for the flag |
+| `is_experiment_active` | `boolean` | No | Whether the associated experiment is currently active |
+| `key` | `string` | Yes | Unique key used to reference the flag |
+| `name` | `string` | Yes | Human-readable name of the flag |
+| `project_id` | `number` | Yes | ID of the project this flag belongs to |
+| `ruleset` | `table` | Yes | Complete ruleset for a feature flag including variants and rollout configuration |
+| `status` | `string` | Yes | Current status of the flag |
+| `workspace_id` | `number` | Yes | ID of the workspace (dataview) this flag belongs to |
+
+### Operations
+
+#### `list(reqmatch, ctrl) -> any, err`
+
+List entities matching the given criteria. Returns an array.
+
+```lua
+local results, err = client:GetFlagDefinition():list()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `GetFlagDefinitionEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
 ## Features
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -259,7 +259,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -290,7 +290,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -321,7 +321,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -349,7 +349,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -384,7 +384,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -415,7 +415,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -449,7 +449,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -480,7 +480,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

@@ -4,7 +4,7 @@
 
 The Golang SDK for the MixpanelFeatureFlags API — an entity-oriented client using standard Go conventions. No generics required; data flows as `map[string]any`.
 
-It exposes the API as capitalised, semantic **Entities** — e.g. `client.Definition(nil)` — each with the same small set of operations (`List`, `Load`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
+It exposes the API as capitalised, semantic **Entities** — e.g. `client.Flag(nil)` — each with the same small set of operations (`List`, `Load`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
 > Also generated from this model: `go-cli`, `go-mcp`, `js`, `lua`, `php`, `py`, `ts` — see
 > the [top-level README](../README.md).
@@ -56,14 +56,12 @@ func main() {
     },
     })
 
-    // List definition records — the value is the array of records itself.
-    definitions, err := client.Definition(nil).List(nil, nil)
+    // Load a single flag — the value is the loaded record.
+    flag, err := client.Flag(nil).Load(map[string]any{"context": "example_context"}, nil)
     if err != nil {
         panic(err)
     }
-    for _, item := range definitions.([]any) {
-        fmt.Println(item)
-    }
+    fmt.Println(flag)
 }
 ```
 
@@ -74,12 +72,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-definitions, err := client.Definition(nil).List(nil, nil)
+flag, err := client.Flag(nil).Load(map[string]any{"context": "example"}, nil)
 if err != nil {
     // handle err
     return
 }
-_ = definitions
+_ = flag
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -143,13 +141,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-definition, err := client.Definition(nil).List(
-    nil, nil,
+flag, err := client.Flag(nil).Load(
+    map[string]any{"context": "example"}, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(definition) // the returned mock data
+fmt.Println(flag) // the returned mock data
 ```
 
 ### Use a custom fetch function
@@ -228,8 +226,8 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `GetUtility` | `() *Utility` | Copy of the SDK utility object. |
 | `Prepare` | `(fetchargs map[string]any) (map[string]any, error)` | Build an HTTP request definition without sending. |
 | `Direct` | `(fetchargs map[string]any) (map[string]any, error)` | Build and send an HTTP request. |
-| `Definition` | `(data map[string]any) MixpanelFeatureFlagsEntity` | Create a Definition entity instance. |
 | `Flag` | `(data map[string]any) MixpanelFeatureFlagsEntity` | Create a Flag entity instance. |
+| `GetFlagDefinition` | `(data map[string]any) MixpanelFeatureFlagsEntity` | Create a GetFlagDefinition entity instance. |
 
 ### Entity interface (MixpanelFeatureFlagsEntity)
 
@@ -258,16 +256,30 @@ Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    definition, err := client.Definition(nil).List(map[string]any{/* fields */}, nil)
+    flag, err := client.Flag(nil).Load(nil, nil)
     if err != nil { /* handle */ }
-    // definition is the returned record
+    // flag is the returned record
 
 Only `Direct()` returns a response envelope — a `map[string]any` with
 `"ok"`, `"status"`, `"headers"`, and `"data"` keys.
 
 ### Entities
 
-#### Definition
+#### Flag
+
+| Field | Description |
+| --- | --- |
+| `"experiment_id"` | The ID of the associated experiment, if any |
+| `"is_experiment_active"` | Whether the associated experiment is currently active |
+| `"is_qa_tester"` | Whether the user was identified as a QA tester |
+| `"variant_key"` | The key of the selected variant |
+| `"variant_value"` | The value of the selected variant (can be any type) |
+
+Operations: Load.
+
+API path: `/flags`
+
+#### GetFlagDefinition
 
 | Field | Description |
 | --- | --- |
@@ -286,59 +298,9 @@ Operations: List.
 
 API path: `/flags/definitions`
 
-#### Flag
-
-| Field | Description |
-| --- | --- |
-| `"experiment_id"` | The ID of the associated experiment, if any |
-| `"is_experiment_active"` | Whether the associated experiment is currently active |
-| `"is_qa_tester"` | Whether the user was identified as a QA tester |
-| `"variant_key"` | The key of the selected variant |
-| `"variant_value"` | The value of the selected variant (can be any type) |
-
-Operations: Load.
-
-API path: `/flags`
-
 
 
 ## Entities
-
-
-### Definition
-
-Create an instance: `definition := client.Definition(nil)`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `List(match, ctrl)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `context` | `string` | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
-| `experiment_id` | `string` | ID of the associated experiment, if any |
-| `id` | `string` | Unique identifier for the flag |
-| `is_experiment_active` | `bool` | Whether the associated experiment is currently active |
-| `key` | `string` | Unique key used to reference the flag |
-| `name` | `string` | Human-readable name of the flag |
-| `project_id` | `int` | ID of the project this flag belongs to |
-| `ruleset` | `map[string]any` | Complete ruleset for a feature flag including variants and rollout configuration |
-| `status` | `string` | Current status of the flag |
-| `workspace_id` | `int` | ID of the workspace (dataview) this flag belongs to |
-
-#### Example: List
-
-```go
-definitions, err := client.Definition(nil).List(nil, nil)
-if err != nil {
-    panic(err)
-}
-fmt.Println(definitions) // the array of records
-```
 
 
 ### Flag
@@ -371,6 +333,42 @@ if err != nil {
 fmt.Println(flag) // the loaded record
 ```
 
+
+### GetFlagDefinition
+
+Create an instance: `getFlagDefinition := client.GetFlagDefinition(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `List(match, ctrl)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `context` | `string` | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
+| `experiment_id` | `string` | ID of the associated experiment, if any |
+| `id` | `string` | Unique identifier for the flag |
+| `is_experiment_active` | `bool` | Whether the associated experiment is currently active |
+| `key` | `string` | Unique key used to reference the flag |
+| `name` | `string` | Human-readable name of the flag |
+| `project_id` | `int` | ID of the project this flag belongs to |
+| `ruleset` | `map[string]any` | Complete ruleset for a feature flag including variants and rollout configuration |
+| `status` | `string` | Current status of the flag |
+| `workspace_id` | `int` | ID of the workspace (dataview) this flag belongs to |
+
+#### Example: List
+
+```go
+getFlagDefinitions, err := client.GetFlagDefinition(nil).List(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(getFlagDefinitions) // the array of records
+```
+
 ## Features
 
 This SDK ships 8 optional features. Each is **inactive until you
@@ -382,14 +380,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -398,7 +396,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -410,7 +408,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -423,7 +421,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -433,7 +431,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -449,7 +447,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -465,7 +463,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -484,7 +482,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -494,7 +492,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -520,8 +518,8 @@ guarantee.
 
 | Entity | Field | Variants | Nesting |
 | --- | --- | --- | --- |
-| `definition` | `ruleset` | 4 | 5 levels |
 | `flag` | `variant_value` | 4 | 0 levels |
+| `get_flag_definition` | `ruleset` | 4 | 5 levels |
 
 These values round-trip unchanged — read them, modify them, send them back. If
 the API adds a `discriminator` to the definition, regenerating will type them.
@@ -565,14 +563,14 @@ stage names.
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -603,15 +601,15 @@ like `core.ToMapAny`.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `List`, the entity
+Entity instances are stateful. After a successful `Load`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-definition := client.Definition(nil)
-definition.List(nil, nil)
+flag := client.Flag(nil)
+flag.Load(map[string]any{"context": "example"}, nil)
 
-// definition.Data() now returns the definition data from the last list
-// definition.Match() returns the last match criteria
+// flag.Data() now returns the flag data from the last load
+// flag.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

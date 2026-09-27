@@ -353,20 +353,6 @@ end
 
 
 
--- Idiomatic facade: client:Definition():list() / client:Definition():load({ id = ... })
--- Entity access is capitalised (PascalCase) for parity with the other SDKs.
-function MixpanelFeatureFlagsSDK:Definition(data)
-  local EntityMod = require("entity.definition_entity")
-  if data == nil then
-    if self._definition == nil then
-      self._definition = EntityMod.new(self, nil)
-    end
-    return self._definition
-  end
-  return EntityMod.new(self, data)
-end
-
-
 -- Idiomatic facade: client:Flag():list() / client:Flag():load({ id = ... })
 -- Entity access is capitalised (PascalCase) for parity with the other SDKs.
 function MixpanelFeatureFlagsSDK:Flag(data)
@@ -376,6 +362,20 @@ function MixpanelFeatureFlagsSDK:Flag(data)
       self._flag = EntityMod.new(self, nil)
     end
     return self._flag
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:GetFlagDefinition():list() / client:GetFlagDefinition():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function MixpanelFeatureFlagsSDK:GetFlagDefinition(data)
+  local EntityMod = require("entity.get_flag_definition_entity")
+  if data == nil then
+    if self._get_flag_definition == nil then
+      self._get_flag_definition = EntityMod.new(self, nil)
+    end
+    return self._get_flag_definition
   end
   return EntityMod.new(self, data)
 end

@@ -42,13 +42,13 @@ client = MixpanelFeatureFlagsSDK.test()
 
 ### Instance Methods
 
-#### `Definition(data=None)`
-
-Create a new `DefinitionEntity` instance. Pass `None` for no initial data.
-
 #### `Flag(data=None)`
 
 Create a new `FlagEntity` instance. Pass `None` for no initial data.
+
+#### `GetFlagDefinition(data=None)`
+
+Create a new `GetFlagDefinitionEntity` instance. Pass `None` for no initial data.
 
 #### `options_map() -> dict`
 
@@ -78,68 +78,6 @@ Make a direct HTTP request to any API endpoint. Returns a result `dict` with `ok
 #### `prepare(fetchargs=None) -> dict`
 
 Prepare a fetch definition without sending. Returns the `fetchdef` and raises on error.
-
-
----
-
-## DefinitionEntity
-
-```python
-definition = client.Definition()
-```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `context` | `str` | Yes | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
-| `experiment_id` | `str` | No | ID of the associated experiment, if any |
-| `id` | `str` | Yes | Unique identifier for the flag |
-| `is_experiment_active` | `bool` | No | Whether the associated experiment is currently active |
-| `key` | `str` | Yes | Unique key used to reference the flag |
-| `name` | `str` | Yes | Human-readable name of the flag |
-| `project_id` | `int` | Yes | ID of the project this flag belongs to |
-| `ruleset` | `dict` | Yes | Complete ruleset for a feature flag including variants and rollout configuration |
-| `status` | `str` | Yes | Current status of the flag |
-| `workspace_id` | `int` | Yes | ID of the workspace (dataview) this flag belongs to |
-
-### Operations
-
-#### `list(reqmatch=None, ctrl=None) -> list`
-
-List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
-
-```python
-results = client.Definition().list()
-for definition in results:
-    print(definition)
-```
-
-### Common Methods
-
-#### `data_get() -> dict`
-
-Get the entity data.
-
-#### `data_set(data)`
-
-Set the entity data.
-
-#### `match_get() -> dict`
-
-Get the entity match criteria.
-
-#### `match_set(match)`
-
-Set the entity match criteria.
-
-#### `make() -> Entity`
-
-Create a new `DefinitionEntity` instance with the same options.
-
-#### `get_name() -> str`
-
-Return the entity name.
 
 
 ---
@@ -199,18 +137,80 @@ Return the entity name.
 
 ---
 
+## GetFlagDefinitionEntity
+
+```python
+get_flag_definition = client.GetFlagDefinition()
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `context` | `str` | Yes | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
+| `experiment_id` | `str` | No | ID of the associated experiment, if any |
+| `id` | `str` | Yes | Unique identifier for the flag |
+| `is_experiment_active` | `bool` | No | Whether the associated experiment is currently active |
+| `key` | `str` | Yes | Unique key used to reference the flag |
+| `name` | `str` | Yes | Human-readable name of the flag |
+| `project_id` | `int` | Yes | ID of the project this flag belongs to |
+| `ruleset` | `dict` | Yes | Complete ruleset for a feature flag including variants and rollout configuration |
+| `status` | `str` | Yes | Current status of the flag |
+| `workspace_id` | `int` | Yes | ID of the workspace (dataview) this flag belongs to |
+
+### Operations
+
+#### `list(reqmatch=None, ctrl=None) -> list`
+
+List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
+
+```python
+results = client.GetFlagDefinition().list()
+for get_flag_definition in results:
+    print(get_flag_definition)
+```
+
+### Common Methods
+
+#### `data_get() -> dict`
+
+Get the entity data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> dict`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `GetFlagDefinitionEntity` instance with the same options.
+
+#### `get_name() -> str`
+
+Return the entity name.
+
+
+---
+
 ## Features
 
 | Feature | Version | Description |
 | --- | --- | --- |
-| `debug` | 0.0.1 | Request/response capture ring buffer for debugging |
-| `idempotency` | 0.0.1 | Idempotency keys for safe retries of mutating operations |
-| `metrics` | 0.0.1 | Statistics capture: per-operation counters and latency |
-| `paging` | 0.0.1 | Pagination signals for list operations |
-| `ratelimit` | 0.0.1 | Client-side rate limiting via a token bucket |
-| `retry` | 0.0.1 | Automatic retry of transient failures with exponential backoff |
-| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
-| `timeout` | 0.0.1 | Per-request timeout with transport abort |
+| `debug` | 0.0.1 | Debug capture |
+| `idempotency` | 0.0.1 | Idempotency |
+| `metrics` | 0.0.1 | Metrics |
+| `paging` | 0.0.1 | Paging |
+| `ratelimit` | 0.0.1 | Rate limiting |
+| `retry` | 0.0.1 | Retry |
+| `test` | 0.0.1 | Test transport |
+| `timeout` | 0.0.1 | Timeout |
 
 
 Features are activated via the `feature` option:
@@ -256,7 +256,7 @@ rather than the transport, so their order does not affect what they observe.
 
 #### `debug`
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 **Configuration**
 
@@ -287,7 +287,7 @@ its default unless you name it.
 
 #### `idempotency`
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 **Configuration**
 
@@ -318,7 +318,7 @@ its default unless you name it.
 
 #### `metrics`
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 **Configuration**
 
@@ -346,7 +346,7 @@ its default unless you name it.
 
 #### `paging`
 
-Pagination signals for list operations.
+Paging.
 
 **Configuration**
 
@@ -381,7 +381,7 @@ its default unless you name it.
 
 #### `ratelimit`
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 **Configuration**
 
@@ -412,7 +412,7 @@ its default unless you name it.
 
 #### `retry`
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 **Configuration**
 
@@ -446,7 +446,7 @@ its default unless you name it.
 
 #### `test`
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 **Configuration**
 
@@ -477,7 +477,7 @@ its default unless you name it.
 
 #### `timeout`
 
-Per-request timeout with transport abort.
+Timeout.
 
 **Configuration**
 

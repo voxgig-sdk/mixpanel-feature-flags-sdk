@@ -27,8 +27,8 @@ Tool-call arguments (what an agent sends):
 
 ```jsonc
 // mixpanel-feature-flags_list: first page of records
-{ "entity": "definition" }
-{ "entity": "definition", "query": { } }
+{ "entity": "get_flag_definition" }
+{ "entity": "get_flag_definition", "query": { } }
 
 // mixpanel-feature-flags_load: one record by id
 { "entity": "flag", "query": { "id": 1 } }
@@ -60,8 +60,8 @@ Tool-call arguments (what an agent sends):
    ```
 
 4. **Restart Claude Code.** The `mixpanel-feature-flags_list` and `mixpanel-feature-flags_load` tools now appear
-   in new sessions. Ask the agent to *"list definition using mixpanel-feature-flags"*
-   and it calls `mixpanel-feature-flags_list` with `{"entity":"definition"}`.
+   in new sessions. Ask the agent to *"list get_flag_definition using mixpanel-feature-flags"*
+   and it calls `mixpanel-feature-flags_list` with `{"entity":"get_flag_definition"}`.
 
 ## How-to guides
 
@@ -92,7 +92,7 @@ Args: `entity` (required), `query` (optional filter map). Returns the first
 page of records as JSON:
 
 ```jsonc
-{ "entity": "definition" }
+{ "entity": "get_flag_definition" }
 ```
 
 ### Call the `mixpanel-feature-flags_load` tool
@@ -153,7 +153,7 @@ JSON schemas are emitted by the SDK from the `Args` struct's `json` /
 
 The 2 entities valid as the `entity` argument:
 
-definition | flag
+flag | get_flag_definition
 
 ### Smoke test via HTTP (raw JSON-RPC)
 

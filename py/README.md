@@ -4,7 +4,7 @@
 
 The Python SDK for the MixpanelFeatureFlags API — an entity-oriented client following Pythonic conventions.
 
-The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Definition()` — each
+The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Flag()` — each
 carrying a small, uniform set of operations (`list`, `load`) instead of raw URL
 paths and query strings. You work with named resources and verbs, which
 keeps the cognitive load low.
@@ -42,18 +42,16 @@ client = MixpanelFeatureFlagsSDK({
 })
 ```
 
-### 2. List definition records
+### 3. Load a flag
 
-`list()` returns a `list` of records (each a `dict`) and raises on
-error — iterate it directly.
+`load()` returns the ENTITY — call data_get() for the record — and raises on error.
 
 ```python
 try:
-    definitions = client.Definition().list()
-    for definition in definitions:
-        print(definition)
+    flag = client.Flag().load({"context": "example_context"})
+    print(flag)
 except Exception as err:
-    print(f"list failed: {err}")
+    print(f"load failed: {err}")
 ```
 
 
@@ -63,10 +61,10 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    definitions = client.Definition().list()
-    print(definitions)
+    flag = client.Flag().load({"context": "example"})
+    print(flag)
 except Exception as err:
-    print(f"list failed: {err}")
+    print(f"load failed: {err}")
 ```
 
 `direct()` does **not** raise — it returns the result envelope. Branch
@@ -132,8 +130,8 @@ client = MixpanelFeatureFlagsSDK.test()
 
 # Entity ops return the ENTITY and raises on error;
 # call data_get() for the record.
-definition = client.Definition().list()
-# definition contains the mock response record
+flag = client.Flag().load({"context": "example"})
+# flag contains the mock response record
 ```
 
 ### Use a custom fetch function
@@ -211,8 +209,8 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `get_utility` | `() -> Utility` | Copy of the SDK utility object. |
 | `prepare` | `(fetchargs) -> dict` | Build an HTTP request definition without sending. Raises on error. |
 | `direct` | `(fetchargs) -> dict` | Build and send an HTTP request. Returns a result dict (branch on `ok`). |
-| `Definition` | `(data) -> DefinitionEntity` | Create a Definition entity instance. |
 | `Flag` | `(data) -> FlagEntity` | Create a Flag entity instance. |
+| `GetFlagDefinition` | `(data) -> GetFlagDefinitionEntity` | Create a GetFlagDefinition entity instance. |
 
 ### Entity interface
 
@@ -249,7 +247,21 @@ On error, `ok` is `False` and `err` contains the error value.
 
 ### Entities
 
-#### Definition
+#### Flag
+
+| Field | Description |
+| --- | --- |
+| `experiment_id` | The ID of the associated experiment, if any |
+| `is_experiment_active` | Whether the associated experiment is currently active |
+| `is_qa_tester` | Whether the user was identified as a QA tester |
+| `variant_key` | The key of the selected variant |
+| `variant_value` | The value of the selected variant (can be any type) |
+
+Operations: Load.
+
+API path: `/flags`
+
+#### GetFlagDefinition
 
 | Field | Description |
 | --- | --- |
@@ -268,55 +280,9 @@ Operations: List.
 
 API path: `/flags/definitions`
 
-#### Flag
-
-| Field | Description |
-| --- | --- |
-| `experiment_id` | The ID of the associated experiment, if any |
-| `is_experiment_active` | Whether the associated experiment is currently active |
-| `is_qa_tester` | Whether the user was identified as a QA tester |
-| `variant_key` | The key of the selected variant |
-| `variant_value` | The value of the selected variant (can be any type) |
-
-Operations: Load.
-
-API path: `/flags`
-
 
 
 ## Entities
-
-
-### Definition
-
-Create an instance: `definition = client.Definition()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list()` | List entities, optionally matching the given criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `context` | `str` | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
-| `experiment_id` | `str` | ID of the associated experiment, if any |
-| `id` | `str` | Unique identifier for the flag |
-| `is_experiment_active` | `bool` | Whether the associated experiment is currently active |
-| `key` | `str` | Unique key used to reference the flag |
-| `name` | `str` | Human-readable name of the flag |
-| `project_id` | `int` | ID of the project this flag belongs to |
-| `ruleset` | `dict` | Complete ruleset for a feature flag including variants and rollout configuration |
-| `status` | `str` | Current status of the flag |
-| `workspace_id` | `int` | ID of the workspace (dataview) this flag belongs to |
-
-#### Example: List
-
-```python
-definitions = client.Definition().list()
-```
 
 
 ### Flag
@@ -345,6 +311,38 @@ Create an instance: `flag = client.Flag()`
 flag = client.Flag().load({"context": "context"})
 ```
 
+
+### GetFlagDefinition
+
+Create an instance: `get_flag_definition = client.GetFlagDefinition()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list()` | List entities, optionally matching the given criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `context` | `str` | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
+| `experiment_id` | `str` | ID of the associated experiment, if any |
+| `id` | `str` | Unique identifier for the flag |
+| `is_experiment_active` | `bool` | Whether the associated experiment is currently active |
+| `key` | `str` | Unique key used to reference the flag |
+| `name` | `str` | Human-readable name of the flag |
+| `project_id` | `int` | ID of the project this flag belongs to |
+| `ruleset` | `dict` | Complete ruleset for a feature flag including variants and rollout configuration |
+| `status` | `str` | Current status of the flag |
+| `workspace_id` | `int` | ID of the workspace (dataview) this flag belongs to |
+
+#### Example: List
+
+```python
+get_flag_definitions = client.GetFlagDefinition().list()
+```
+
 ## Features
 
 This SDK ships 8 optional features. Each is **inactive until you
@@ -356,14 +354,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -372,7 +370,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -384,7 +382,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -397,7 +395,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -407,7 +405,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -423,7 +421,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -439,7 +437,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -458,7 +456,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -468,7 +466,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -494,8 +492,8 @@ guarantee.
 
 | Entity | Field | Variants | Nesting |
 | --- | --- | --- | --- |
-| `definition` | `ruleset` | 4 | 5 levels |
 | `flag` | `variant_value` | 4 | 0 levels |
+| `get_flag_definition` | `ruleset` | 4 | 5 levels |
 
 These values round-trip unchanged — read them, modify them, send them back. If
 the API adds a `discriminator` to the definition, regenerating will type them.
@@ -539,14 +537,14 @@ with hook methods named after pipeline stages (e.g. `PrePoint`,
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -580,15 +578,15 @@ Import entity or utility modules directly only when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-definition = client.Definition()
-definition.list()
+flag = client.Flag()
+flag.load({"context": "example"})
 
-# definition.data_get() now returns the definition data from the last list
-# definition.match_get() returns the last match criteria
+# flag.data_get() now returns the flag data from the last load
+# flag.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

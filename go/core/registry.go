@@ -20,7 +20,7 @@ var NewTestFeatureFunc func() Feature
 
 var NewTimeoutFeatureFunc func() Feature
 
-var NewDefinitionEntityFunc func(client *MixpanelFeatureFlagsSDK, entopts map[string]any) MixpanelFeatureFlagsEntity
-
 var NewFlagEntityFunc func(client *MixpanelFeatureFlagsSDK, entopts map[string]any) MixpanelFeatureFlagsEntity
+
+var NewGetFlagDefinitionEntityFunc func(client *MixpanelFeatureFlagsSDK, entopts map[string]any) MixpanelFeatureFlagsEntity
 

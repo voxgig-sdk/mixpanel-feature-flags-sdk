@@ -1,8 +1,8 @@
 {
   "files": [
     "SUMMARY.md",
-    "docs/api/definition.html",
     "docs/api/flag.html",
+    "docs/api/get_flag_definition.html",
     "docs/api/index.html",
     "docs/features/debug.html",
     "docs/features/idempotency.html",

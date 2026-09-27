@@ -2,8 +2,8 @@
 // MixpanelFeatureFlags Ts SDK
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SDK = exports.MixpanelFeatureFlagsSDK = exports.MixpanelFeatureFlagsEntityBase = exports.BaseFeature = exports.config = exports.stdutil = void 0;
-const DefinitionEntity_1 = require("./entity/DefinitionEntity");
 const FlagEntity_1 = require("./entity/FlagEntity");
+const GetFlagDefinitionEntity_1 = require("./entity/GetFlagDefinitionEntity");
 const node_util_1 = require("node:util");
 const Config_1 = require("./Config");
 Object.defineProperty(exports, "config", { enumerable: true, get: function () { return Config_1.config; } });
@@ -85,7 +85,6 @@ class MixpanelFeatureFlagsSDK {
             ctrl: fetchargs.ctrl || {},
         }, this._rootctx);
         const options = this._options;
-        // Build spec directly from SDK options + user-provided fetch args.
         const spec = {
             base: options.base,
             prefix: options.prefix,
@@ -99,14 +98,12 @@ class MixpanelFeatureFlagsSDK {
             step: 'start',
         };
         ctx.spec = spec;
-        // Merge user-provided headers over SDK defaults.
         if (fetchargs.headers) {
             const uheaders = fetchargs.headers;
             for (let key in uheaders) {
                 spec.headers[key] = uheaders[key];
             }
         }
-        // Apply SDK auth (apikey, auth prefix, etc.)
         const authResult = prepareAuth(ctx);
         if (authResult instanceof Error) {
             return authResult;
@@ -181,18 +178,6 @@ class MixpanelFeatureFlagsSDK {
             return { ok: false, err };
         }
     }
-    // Raw GraphQL access: the pressure valve that makes the generated
-    // surface's deliberate omissions (per-call selection sets, typed filter
-    // builders, batching, subscriptions) livable — the whole schema stays
-    // reachable.
-    //
-    // Thin wrapper over the same prepare/fetch path `direct` uses, with the
-    // one thing raw `direct` cannot do for GraphQL: a GraphQL failure rides
-    // HTTP 200 as a top-level `errors` array, so status alone would report a
-    // failed query as ok.
-    //
-    // NOTE: like `direct`, this bypasses the feature pipeline — no retry,
-    // ratelimit or paging features apply.
     async graphql(query, variables, ctrl) {
         const options = this._options;
         if (!options.allow.op.includes('graphql')) {
@@ -226,19 +211,19 @@ class MixpanelFeatureFlagsSDK {
         }
         return res;
     }
-    // Entity access: `client.Definition().list()` / `client.Definition().load({ id })`.
-    // The argument is the entity OPTIONS object (passed to the entity
-    // constructor as entopts), not initial entity data.
-    Definition(entopts) {
-        const self = this;
-        return new DefinitionEntity_1.DefinitionEntity(self, entopts);
-    }
     // Entity access: `client.Flag().list()` / `client.Flag().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
     // constructor as entopts), not initial entity data.
     Flag(entopts) {
         const self = this;
         return new FlagEntity_1.FlagEntity(self, entopts);
+    }
+    // Entity access: `client.GetFlagDefinition().list()` / `client.GetFlagDefinition().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    GetFlagDefinition(entopts) {
+        const self = this;
+        return new GetFlagDefinitionEntity_1.GetFlagDefinitionEntity(self, entopts);
     }
     static test(testoptsarg, sdkoptsarg) {
         const struct = stdutil.struct;

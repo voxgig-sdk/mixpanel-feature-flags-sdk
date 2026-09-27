@@ -5,7 +5,7 @@
 The JavaScript SDK for the MixpanelFeatureFlags API — an entity-oriented client with full async/await support.
 
 The API is exposed as capitalised, semantic **Entities** — e.g.
-`client.Definition()` — each with a small set of operations (`list`, `load`)
+`client.Flag()` — each with a small set of operations (`list`, `load`)
 instead of raw URL paths and query parameters. This keeps the surface
 predictable and low-friction for both humans and AI agents.
 
@@ -26,20 +26,18 @@ loading a specific record.
 ### Create a Client
 
 ```js
-const { MixpanelFeatureFlagsSDK } = require('@voxgig-sdk/mixpanel-feature-flags-js')
+const { MixpanelFeatureFlagsSDK } = require('@voxgig-sdk/mixpanel-feature-flags-sdk-js')
 
 const client = new MixpanelFeatureFlagsSDK({
   apikey: process.env.MIXPANEL_FEATURE_FLAGS_APIKEY,
 })
 ```
 
-### List Definition Records
+### Load a Flag
 
 ```js
-const definitions = await client.Definition().list()
-for (const definition of definitions) {
-  console.log(definition)
-}
+const flag = await client.Flag().load({ context: 'example_context' })
+console.log(flag)
 ```
 
 ### Direct API Access
@@ -65,10 +63,10 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const definitions = await client.Definition().list()
-  console.log(definitions)
+  const flag = await client.Flag().load({ context: "example" })
+  console.log(flag)
 } catch (err) {
-  console.error('list failed:', err)
+  console.error('load failed:', err)
 }
 ```
 
@@ -132,10 +130,10 @@ Create a mock client for unit testing — no server required:
 ```js
 const client = MixpanelFeatureFlagsSDK.test()
 
-const definition = await client.Definition().list()
-// definition is the entity, populated with mock response data
-// — call definition.data() for the record itself
-console.log(definition)
+const flag = await client.Flag().load({ context: 'example_context' })
+// flag is the entity, populated with mock response data
+// — call flag.data() for the record itself
+console.log(flag)
 ```
 
 You can also use the instance method:
@@ -150,14 +148,14 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```js
-const entity = client.Definition()
+const entity = client.Flag()
 
 // First call runs the operation and stores its result
-await entity.list()
+await entity.load({ context: 'example_context' })
 
 // Subsequent calls reuse the stored state
 const data = entity.data()
-console.log(data.id)
+console.log(data)
 ```
 
 ### Add custom middleware
@@ -225,8 +223,8 @@ new MixpanelFeatureFlagsSDK(options?)
 | `utility()` | `Utility` | Deep copy of the SDK utility object. |
 | `prepare(fetchargs?)` | `Promise<FetchDef>` | Build an HTTP request definition without sending it. |
 | `direct(fetchargs?)` | `Promise<DirectResult>` | Build and send an HTTP request. |
-| `Definition(data?)` | `DefinitionEntity` | Create a Definition entity instance. |
 | `Flag(data?)` | `FlagEntity` | Create a Flag entity instance. |
+| `GetFlagDefinition(data?)` | `GetFlagDefinitionEntity` | Create a GetFlagDefinition entity instance. |
 | `tester(testopts?, sdkopts?)` | `MixpanelFeatureFlagsSDK` | Create a test-mode client instance. |
 
 #### Static methods
@@ -294,7 +292,21 @@ The `prepare()` method returns:
 
 ### Entities
 
-#### Definition
+#### Flag
+
+| Field | Description |
+| --- | --- |
+| `experiment_id` | The ID of the associated experiment, if any |
+| `is_experiment_active` | Whether the associated experiment is currently active |
+| `is_qa_tester` | Whether the user was identified as a QA tester |
+| `variant_key` | The key of the selected variant |
+| `variant_value` | The value of the selected variant (can be any type) |
+
+Operations: load.
+
+API path: `/flags`
+
+#### GetFlagDefinition
 
 | Field | Description |
 | --- | --- |
@@ -313,55 +325,9 @@ Operations: list.
 
 API path: `/flags/definitions`
 
-#### Flag
-
-| Field | Description |
-| --- | --- |
-| `experiment_id` | The ID of the associated experiment, if any |
-| `is_experiment_active` | Whether the associated experiment is currently active |
-| `is_qa_tester` | Whether the user was identified as a QA tester |
-| `variant_key` | The key of the selected variant |
-| `variant_value` | The value of the selected variant (can be any type) |
-
-Operations: load.
-
-API path: `/flags`
-
 
 
 ## Entities
-
-
-### Definition
-
-Create an instance: `const definition = client.Definition()`
-
-#### Operations
-
-| Method | Description |
-| --- | --- |
-| `list(match)` | List entities matching the criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `context` | `string` | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
-| `experiment_id` | `string` | ID of the associated experiment, if any |
-| `id` | `string` | Unique identifier for the flag |
-| `is_experiment_active` | `boolean` | Whether the associated experiment is currently active |
-| `key` | `string` | Unique key used to reference the flag |
-| `name` | `string` | Human-readable name of the flag |
-| `project_id` | `number` | ID of the project this flag belongs to |
-| `ruleset` | `Object` | Complete ruleset for a feature flag including variants and rollout configuration |
-| `status` | `string` | Current status of the flag |
-| `workspace_id` | `number` | ID of the workspace (dataview) this flag belongs to |
-
-#### Example: List
-
-```ts
-const definitions = await client.Definition().list()
-```
 
 
 ### Flag
@@ -390,6 +356,38 @@ Create an instance: `const flag = client.Flag()`
 const flag = await client.Flag().load({ context: 'context' })
 ```
 
+
+### GetFlagDefinition
+
+Create an instance: `const get_flag_definition = client.GetFlagDefinition()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `list(match)` | List entities matching the criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `context` | `string` | The context variable used for flag evaluation (e.g., distinct_id, device_id) |
+| `experiment_id` | `string` | ID of the associated experiment, if any |
+| `id` | `string` | Unique identifier for the flag |
+| `is_experiment_active` | `boolean` | Whether the associated experiment is currently active |
+| `key` | `string` | Unique key used to reference the flag |
+| `name` | `string` | Human-readable name of the flag |
+| `project_id` | `number` | ID of the project this flag belongs to |
+| `ruleset` | `Object` | Complete ruleset for a feature flag including variants and rollout configuration |
+| `status` | `string` | Current status of the flag |
+| `workspace_id` | `number` | ID of the workspace (dataview) this flag belongs to |
+
+#### Example: List
+
+```ts
+const get_flag_definitions = await client.GetFlagDefinition().list()
+```
+
 ## Features
 
 This SDK ships 8 optional features. Each is **inactive until you
@@ -401,14 +399,14 @@ above:
 
 | Feature | What it does |
 |---|---|
-| [`debug`](#debug) | Request/response capture ring buffer for debugging |
-| [`idempotency`](#idempotency) | Idempotency keys for safe retries of mutating operations |
-| [`metrics`](#metrics) | Statistics capture: per-operation counters and latency |
-| [`paging`](#paging) | Pagination signals for list operations |
-| [`ratelimit`](#ratelimit) | Client-side rate limiting via a token bucket |
-| [`retry`](#retry) | Automatic retry of transient failures with exponential backoff |
-| [`test`](#test) | In-memory mock transport for testing without a live server |
-| [`timeout`](#timeout) | Per-request timeout with transport abort |
+| [`debug`](#debug) | Debug capture |
+| [`idempotency`](#idempotency) | Idempotency |
+| [`metrics`](#metrics) | Metrics |
+| [`paging`](#paging) | Paging |
+| [`ratelimit`](#ratelimit) | Rate limiting |
+| [`retry`](#retry) | Retry |
+| [`test`](#test) | Test transport |
+| [`timeout`](#timeout) | Timeout |
 
 > **Order matters for `ratelimit`, `retry`, `timeout`.** These wrap the
 > transport, so each one wraps whatever is already installed: the order you
@@ -417,7 +415,7 @@ above:
 
 ### debug
 
-Request/response capture ring buffer for debugging.
+Debug capture.
 
 | Option | Default |
 |---|---|
@@ -429,7 +427,7 @@ Set `feature.debug.active` to enable it, then override any of the options above.
 
 ### idempotency
 
-Idempotency keys for safe retries of mutating operations.
+Idempotency.
 
 | Option | Default |
 |---|---|
@@ -442,7 +440,7 @@ Set `feature.idempotency.active` to enable it, then override any of the options 
 
 ### metrics
 
-Statistics capture: per-operation counters and latency.
+Metrics.
 
 | Option | Default |
 |---|---|
@@ -452,7 +450,7 @@ Set `feature.metrics.active` to enable it, then override any of the options abov
 
 ### paging
 
-Pagination signals for list operations.
+Paging.
 
 | Option | Default |
 |---|---|
@@ -468,7 +466,7 @@ Set `feature.paging.active` to enable it, then override any of the options above
 
 ### ratelimit
 
-Client-side rate limiting via a token bucket.
+Rate limiting.
 
 | Option | Default |
 |---|---|
@@ -484,7 +482,7 @@ activated earlier.
 
 ### retry
 
-Automatic retry of transient failures with exponential backoff.
+Retry.
 
 | Option | Default |
 |---|---|
@@ -503,7 +501,7 @@ activated earlier.
 
 ### test
 
-In-memory mock transport for testing without a live server.
+Test transport.
 
 | Option | Default |
 |---|---|
@@ -513,7 +511,7 @@ Set `feature.test.active` to enable it, then override any of the options above.
 
 ### timeout
 
-Per-request timeout with transport abort.
+Timeout.
 
 | Option | Default |
 |---|---|
@@ -539,8 +537,8 @@ guarantee.
 
 | Entity | Field | Variants | Nesting |
 | --- | --- | --- | --- |
-| `definition` | `ruleset` | 4 | 5 levels |
 | `flag` | `variant_value` | 4 | 0 levels |
+| `get_flag_definition` | `ruleset` | 4 | 5 levels |
 
 These values round-trip unchanged — read them, modify them, send them back. If
 the API adds a `discriminator` to the definition, regenerating will type them.
@@ -584,14 +582,14 @@ a function that receives the context.
 
 The SDK ships with built-in features:
 
-- **DebugFeature**: Request/response capture ring buffer for debugging
-- **IdempotencyFeature**: Idempotency keys for safe retries of mutating operations
-- **MetricsFeature**: Statistics capture: per-operation counters and latency
-- **PagingFeature**: Pagination signals for list operations
-- **RatelimitFeature**: Client-side rate limiting via a token bucket
-- **RetryFeature**: Automatic retry of transient failures with exponential backoff
-- **TestFeature**: In-memory mock transport for testing without a live server
-- **TimeoutFeature**: Per-request timeout with transport abort
+- **DebugFeature**: Debug capture
+- **IdempotencyFeature**: Idempotency
+- **MetricsFeature**: Metrics
+- **PagingFeature**: Paging
+- **RatelimitFeature**: Rate limiting
+- **RetryFeature**: Retry
+- **TestFeature**: Test transport
+- **TimeoutFeature**: Timeout
 
 Features are initialized in order. Hooks fire in the order features
 were added, so later features can override earlier ones.
@@ -611,21 +609,21 @@ mixpanel-feature-flags/
 Import the SDK from the package root:
 
 ```js
-const { MixpanelFeatureFlagsSDK } = require('@voxgig-sdk/mixpanel-feature-flags-js')
+const { MixpanelFeatureFlagsSDK } = require('@voxgig-sdk/mixpanel-feature-flags-sdk-js')
 ```
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const definition = client.Definition()
-await definition.list()
+const flag = client.Flag()
+await flag.load({ context: "example" })
 
-// definition.data() now returns the definition data from the last `list`
-// definition.match() returns the last match criteria
+// flag.data() now returns the flag data from the last `load`
+// flag.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

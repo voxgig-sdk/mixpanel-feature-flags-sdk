@@ -307,16 +307,16 @@ class MixpanelFeatureFlagsSDK:
         return res
 
 
-    def Definition(self, data=None) -> "DefinitionEntity":
-        """Entity factory: client.Definition().list() / client.Definition().load({"id": ...})."""
-        from mixpanelfeatureflags_sdk.entity.definition_entity import DefinitionEntity
-        return DefinitionEntity(self, data)
-
-
     def Flag(self, data=None) -> "FlagEntity":
         """Entity factory: client.Flag().list() / client.Flag().load({"id": ...})."""
         from mixpanelfeatureflags_sdk.entity.flag_entity import FlagEntity
         return FlagEntity(self, data)
+
+
+    def GetFlagDefinition(self, data=None) -> "GetFlagDefinitionEntity":
+        """Entity factory: client.GetFlagDefinition().list() / client.GetFlagDefinition().load({"id": ...})."""
+        from mixpanelfeatureflags_sdk.entity.get_flag_definition_entity import GetFlagDefinitionEntity
+        return GetFlagDefinitionEntity(self, data)
 
 
 
@@ -346,5 +346,5 @@ class MixpanelFeatureFlagsSDK:
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from mixpanelfeatureflags_sdk.entity.definition_entity import DefinitionEntity
     from mixpanelfeatureflags_sdk.entity.flag_entity import FlagEntity
+    from mixpanelfeatureflags_sdk.entity.get_flag_definition_entity import GetFlagDefinitionEntity

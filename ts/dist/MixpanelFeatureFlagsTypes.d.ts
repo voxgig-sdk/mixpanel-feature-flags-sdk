@@ -1,4 +1,16 @@
-export interface Definition {
+export interface Flag {
+    experiment_id?: string;
+    is_experiment_active?: boolean;
+    is_qa_tester?: boolean;
+    variant_key: string;
+    variant_value: any;
+}
+export interface FlagLoadMatch {
+    context: string;
+    project_id?: string;
+    token?: string;
+}
+export interface GetFlagDefinition {
     context: string;
     experiment_id?: string;
     id: string;
@@ -10,19 +22,7 @@ export interface Definition {
     status: string;
     workspace_id: number;
 }
-export interface DefinitionListMatch {
-    project_id?: string;
-    token?: string;
-}
-export interface Flag {
-    experiment_id?: string;
-    is_experiment_active?: boolean;
-    is_qa_tester?: boolean;
-    variant_key: string;
-    variant_value: any;
-}
-export interface FlagLoadMatch {
-    context: string;
+export interface GetFlagDefinitionListMatch {
     project_id?: string;
     token?: string;
 }

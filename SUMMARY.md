@@ -12,20 +12,6 @@ An entity groups related API operations. An operation can have several routes wi
 
 ## What the API provides
 
-### [Definition](docs/api/definition.html)
-
-Results: Success.
-
-SDK operations: `list`.
-
-Key fields to recognise:
-
-- `context`: The context variable used for flag evaluation (for example, distinct_id, device_id)
-- `experiment_id`: ID of the associated experiment, if any
-- `id`: Unique identifier for the flag
-- `is_experiment_active`: Whether the associated experiment is currently active
-- `key`: Unique key used to reference the flag
-
 ### [Flag](docs/api/flag.html)
 
 Results: Success.
@@ -40,14 +26,28 @@ Key fields to recognise:
 - `variant_key`: The key of the selected variant
 - `variant_value`: The value of the selected variant (can be any type)
 
+### [GetFlagDefinition](docs/api/get_flag_definition.html)
+
+Results: Success.
+
+SDK operations: `list`.
+
+Key fields to recognise:
+
+- `context`: The context variable used for flag evaluation (for example, distinct_id, device_id)
+- `experiment_id`: ID of the associated experiment, if any
+- `id`: Unique identifier for the flag
+- `is_experiment_active`: Whether the associated experiment is currently active
+- `key`: Unique key used to reference the flag
+
 ### Route map
 
 Use this map to locate a capability. Consult the entity reference before supplying request data; routes for the same operation can require different fields.
 
 | Entity | SDK operation | HTTP route | Authentication |
 | --- | --- | --- | --- |
-| [Definition](docs/api/definition.html) | `list` | `GET /flags/definitions` | Required |
 | [Flag](docs/api/flag.html) | `load` | `GET /flags` | Required |
+| [GetFlagDefinition](docs/api/get_flag_definition.html) | `list` | `GET /flags/definitions` | Required |
 
 ## Connect to the API
 
@@ -55,11 +55,11 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 
 The default credential is sent in the `Authorization` header with the `Basic` prefix.
 
-OAuth Token
+Service Account
 
 Project Secret
 
-Service Account
+OAuth Token
 
 Check authentication for the route you plan to call. A route that declares no authentication can be used without credentials; this does not change the requirements of other routes. Keep credentials in environment variables or a configured secret provider, and keep them out of source control and logs.
 
@@ -103,7 +103,7 @@ Use the MCP server to expose supported API operations to an MCP client.
 
 Repository directory: `go-mcp/`. Not published. Build from the go-mcp directory.
 
-- `mixpanel-feature-flags_list`: List records for an entity. Supported entities: `definition`.
+- `mixpanel-feature-flags_list`: List records for an entity. Supported entities: `get_flag_definition`.
 - `mixpanel-feature-flags_load`: Load one record for an entity. Supported entities: `flag`.
 
 ## Operational features

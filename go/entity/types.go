@@ -1,7 +1,7 @@
 // Typed models for the MixpanelFeatureFlags SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 package entity
@@ -12,38 +12,23 @@ import (
 	"github.com/voxgig-sdk/mixpanel-feature-flags-sdk/go/core"
 )
 
-// Definition is the typed data model for the definition entity.
-type Definition struct {
-	Context string `json:"context"`
-	ExperimentId *string `json:"experiment_id,omitempty"`
-	Id string `json:"id"`
-	IsExperimentActive *bool `json:"is_experiment_active,omitempty"`
-	Key string `json:"key"`
-	Name string `json:"name"`
-	ProjectId int `json:"project_id"`
-	Ruleset map[string]any `json:"ruleset"`
-	Status string `json:"status"`
-	WorkspaceId int `json:"workspace_id"`
-}
-
-// DefinitionListMatch is the typed request payload for Definition.ListTyped.
-type DefinitionListMatch struct {
-	ProjectId *string `json:"project_id,omitempty"`
-	Token *string `json:"token,omitempty"`
-}
-
 // Flag is the typed data model for the flag entity.
 type Flag struct {
-	ExperimentId *string `json:"experiment_id,omitempty"`
-	IsExperimentActive *bool `json:"is_experiment_active,omitempty"`
-	IsQaTester *bool `json:"is_qa_tester,omitempty"`
-	VariantKey string `json:"variant_key"`
-	VariantValue any `json:"variant_value"`
 }
 
 // FlagLoadMatch is the typed request payload for Flag.LoadTyped.
 type FlagLoadMatch struct {
 	Context string `json:"context"`
+	ProjectId *string `json:"project_id,omitempty"`
+	Token *string `json:"token,omitempty"`
+}
+
+// GetFlagDefinition is the typed data model for the get_flag_definition entity.
+type GetFlagDefinition struct {
+}
+
+// GetFlagDefinitionListMatch is the typed request payload for GetFlagDefinition.ListTyped.
+type GetFlagDefinitionListMatch struct {
 	ProjectId *string `json:"project_id,omitempty"`
 	Token *string `json:"token,omitempty"`
 }

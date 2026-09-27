@@ -1,0 +1,148 @@
+# Entity: get_flag_definition
+
+main: kit: entity: get_flag_definition: {
+
+  alias: field: {}
+
+  fields: {
+    context: {
+      h: "Context"
+      n: "context"
+      r: true
+      sh: "The context variable used for flag evaluation (e.g., distinct_id, device_id)"
+      t: "`$STRING`"
+    }
+    experiment_id: {
+      h: "Experiment Id"
+      n: "experiment_id"
+      r: false
+      sh: "ID of the associated experiment, if any"
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: true
+      sh: "Unique identifier for the flag"
+      t: "`$STRING`"
+    }
+    is_experiment_active: {
+      h: "Is Experiment Active"
+      n: "is_experiment_active"
+      r: false
+      sh: "Whether the associated experiment is currently active"
+      t: "`$BOOLEAN`"
+    }
+    key: {
+      h: "Key"
+      n: "key"
+      r: true
+      sh: "Unique key used to reference the flag"
+      t: "`$STRING`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: true
+      sh: "Human-readable name of the flag"
+      t: "`$STRING`"
+    }
+    project_id: {
+      fo: "int32"
+      h: "Project Id"
+      n: "project_id"
+      r: true
+      sh: "ID of the project this flag belongs to"
+      t: "`$INTEGER`"
+    }
+    ruleset: {
+      h: "Ruleset"
+      n: "ruleset"
+      r: true
+      sh: "Complete ruleset for a feature flag including variants and rollout configuration"
+      t: "`$OBJECT`"
+      union: {
+        branches: 4
+        count: 1
+        depth: 5
+      }
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: true
+      sh: "Current status of the flag"
+      t: "`$STRING`"
+    }
+    workspace_id: {
+      fo: "int64"
+      h: "Workspace Id"
+      n: "workspace_id"
+      r: true
+      sh: "ID of the workspace (dataview) this flag belongs to"
+      t: "`$INTEGER`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+  }
+
+  name: "get_flag_definition"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /flags/definitions"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "project_id"
+                or: "project_id"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "token"
+                or: "token"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/flags/definitions"
+          q: {
+            exist: [
+              "project_id"
+              "token"
+            ]
+          }
+          s: [
+            {
+              lit: "flags"
+            }
+            {
+              lit: "definitions"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.flags`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,7 +1,7 @@
 // MixpanelFeatureFlags Js SDK
 
-const { DefinitionEntity } = require('./entity/DefinitionEntity')
 const { FlagEntity } = require('./entity/FlagEntity')
+const { GetFlagDefinitionEntity } = require('./entity/GetFlagDefinitionEntity')
 
 
 const { inspect } = require('node:util')
@@ -294,21 +294,21 @@ class MixpanelFeatureFlagsSDK {
 
 
 
-  // Entity access: `client.Definition().list()` / `client.Definition().load({ id })`.
-  // The argument is the entity OPTIONS object (passed to the entity
-  // constructor as entopts), not initial entity data.
-  Definition(entopts) {
-    const self = this
-    return new DefinitionEntity(self, entopts)
-  }
-
-
   // Entity access: `client.Flag().list()` / `client.Flag().load({ id })`.
   // The argument is the entity OPTIONS object (passed to the entity
   // constructor as entopts), not initial entity data.
   Flag(entopts) {
     const self = this
     return new FlagEntity(self, entopts)
+  }
+
+
+  // Entity access: `client.GetFlagDefinition().list()` / `client.GetFlagDefinition().load({ id })`.
+  // The argument is the entity OPTIONS object (passed to the entity
+  // constructor as entopts), not initial entity data.
+  GetFlagDefinition(entopts) {
+    const self = this
+    return new GetFlagDefinitionEntity(self, entopts)
   }
 
 

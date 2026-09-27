@@ -24,12 +24,6 @@ const FEATURE_CLASS: Record<string, typeof BaseFeature> = {
 }
 
 
-// Per-feature plugin DEFINITIONS (voxgig/plugin `Definition` values), from
-// the model's active plugin groups. A feature that takes a `plugins` option
-// (secrets over sekreto) reads its own entry; a feature with no plugins has
-// none. Named imports above make each definition statically reachable, so
-// an SDK carries exactly the plugin modules its model selects — the same
-// leanness the old side-effect registry imports bought, without a registry.
 const FEATURE_PLUGINS: Record<string, any[]> = {
   
 }
@@ -40,7 +34,6 @@ class Config {
   makeFeature(this: any, fn: string) {
     const fc = FEATURE_CLASS[fn]
     const fi = new fc()
-    // TODO: errors etc
     return fi
   }
 
@@ -214,10 +207,10 @@ class Config {
 
     entity: {
       
-        definition: {
+        flag: {
         },
   
-        flag: {
+        get_flag_definition: {
         },
   
     }
@@ -225,101 +218,187 @@ class Config {
 
 
   entity = {
-    "definition": {
+    "flag": {
       "fields": [
         {
-          "name": "context",
-          "req": true,
-          "short": "The context variable used for flag evaluation (e.g., distinct_id, device_id)",
-          "type": "`$STRING`"
-        },
-        {
           "name": "experiment_id",
-          "short": "ID of the associated experiment, if any",
-          "type": "`$STRING`"
-        },
-        {
-          "name": "id",
-          "req": true,
-          "short": "Unique identifier for the flag",
-          "type": "`$STRING`"
+          "title": "Experiment Id",
+          "type": "`$STRING`",
+          "short": "The ID of the associated experiment, if any"
         },
         {
           "name": "is_experiment_active",
-          "short": "Whether the associated experiment is currently active",
-          "type": "`$BOOLEAN`"
+          "title": "Is Experiment Active",
+          "type": "`$BOOLEAN`",
+          "short": "Whether the associated experiment is currently active"
+        },
+        {
+          "name": "is_qa_tester",
+          "title": "Is Qa Tester",
+          "type": "`$BOOLEAN`",
+          "short": "Whether the user was identified as a QA tester"
+        },
+        {
+          "name": "variant_key",
+          "title": "Variant Key",
+          "type": "`$STRING`",
+          "req": true,
+          "short": "The key of the selected variant"
+        },
+        {
+          "name": "variant_value",
+          "title": "Variant Value",
+          "type": "`$ANY`",
+          "req": true,
+          "short": "The value of the selected variant (can be any type)"
+        }
+      ],
+      "name": "flag",
+      "op": {
+        "load": {
+          "input": "data",
+          "name": "load",
+          "points": [
+            {
+              "kind": "http",
+              "method": "GET",
+              "orig": "/flags",
+              "segments": [
+                {
+                  "lit": "flags"
+                }
+              ],
+              "parts": [
+                "flags"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.flags`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "context",
+                    "orig": "context",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true,
+                    "example": "%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22"
+                  },
+                  {
+                    "name": "project_id",
+                    "orig": "project_id",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "token",
+                    "orig": "token",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "context",
+                  "project_id",
+                  "token"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "relations": {
+        "ancestors": []
+      }
+    },
+    "get_flag_definition": {
+      "fields": [
+        {
+          "name": "context",
+          "title": "Context",
+          "type": "`$STRING`",
+          "req": true,
+          "short": "The context variable used for flag evaluation (e.g., distinct_id, device_id)"
+        },
+        {
+          "name": "experiment_id",
+          "title": "Experiment Id",
+          "type": "`$STRING`",
+          "short": "ID of the associated experiment, if any"
+        },
+        {
+          "name": "id",
+          "title": "Id",
+          "type": "`$STRING`",
+          "req": true,
+          "short": "Unique identifier for the flag"
+        },
+        {
+          "name": "is_experiment_active",
+          "title": "Is Experiment Active",
+          "type": "`$BOOLEAN`",
+          "short": "Whether the associated experiment is currently active"
         },
         {
           "name": "key",
+          "title": "Key",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique key used to reference the flag",
-          "type": "`$STRING`"
+          "short": "Unique key used to reference the flag"
         },
         {
           "name": "name",
+          "title": "Name",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Human-readable name of the flag",
-          "type": "`$STRING`"
+          "short": "Human-readable name of the flag"
         },
         {
-          "format": "int32",
           "name": "project_id",
+          "title": "Project Id",
+          "type": "`$INTEGER`",
           "req": true,
           "short": "ID of the project this flag belongs to",
-          "type": "`$INTEGER`"
+          "format": "int32"
         },
         {
           "name": "ruleset",
-          "req": true,
-          "short": "Complete ruleset for a feature flag including variants and rollout configuration",
+          "title": "Ruleset",
           "type": "`$OBJECT`",
-          "union": {
-            "branches": 4,
-            "count": 1,
-            "depth": 5
-          }
+          "req": true,
+          "short": "Complete ruleset for a feature flag including variants and rollout configuration"
         },
         {
           "name": "status",
+          "title": "Status",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Current status of the flag",
-          "type": "`$STRING`"
+          "short": "Current status of the flag"
         },
         {
-          "format": "int64",
           "name": "workspace_id",
+          "title": "Workspace Id",
+          "type": "`$INTEGER`",
           "req": true,
           "short": "ID of the workspace (dataview) this flag belongs to",
-          "type": "`$INTEGER`"
+          "format": "int64"
         }
       ],
       "id": {
         "field": "id",
         "name": "id"
       },
-      "name": "definition",
+      "name": "get_flag_definition",
       "op": {
         "list": {
           "input": "data",
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "kind": "query",
-                    "name": "project_id",
-                    "orig": "project_id",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "token",
-                    "orig": "token",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/flags/definitions",
@@ -331,116 +410,37 @@ class Config {
                   "lit": "definitions"
                 }
               ],
-              "select": {
-                "exist": [
-                  "project_id",
-                  "token"
-                ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.flags`"
-              },
               "parts": [
                 "flags",
                 "definitions"
-              ]
-            }
-          ]
-        }
-      },
-      "relations": {
-        "ancestors": []
-      }
-    },
-    "flag": {
-      "fields": [
-        {
-          "name": "experiment_id",
-          "short": "The ID of the associated experiment, if any",
-          "type": "`$STRING`"
-        },
-        {
-          "name": "is_experiment_active",
-          "short": "Whether the associated experiment is currently active",
-          "type": "`$BOOLEAN`"
-        },
-        {
-          "name": "is_qa_tester",
-          "short": "Whether the user was identified as a QA tester",
-          "type": "`$BOOLEAN`"
-        },
-        {
-          "name": "variant_key",
-          "req": true,
-          "short": "The key of the selected variant",
-          "type": "`$STRING`"
-        },
-        {
-          "name": "variant_value",
-          "req": true,
-          "short": "The value of the selected variant (can be any type)",
-          "type": "`$ANY`",
-          "union": {
-            "branches": 4,
-            "count": 1,
-            "depth": 0
-          }
-        }
-      ],
-      "name": "flag",
-      "op": {
-        "load": {
-          "input": "data",
-          "name": "load",
-          "points": [
-            {
-              "args": {
-                "query": [
-                  {
-                    "example": "%7B++%22distinct_id%22%3A%22user123%22%2C++%22device_id%22%3A%22device456%22%2C++%22custom_properties%22%3A+%7B++++%22some_key%22%3A+%22some_value%22%2C++++%22another_key%22%3A+32++%7D%7D%22",
-                    "kind": "query",
-                    "name": "context",
-                    "orig": "context",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "project_id",
-                    "orig": "project_id",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "kind": "query",
-                    "name": "token",
-                    "orig": "token",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
-              "kind": "http",
-              "method": "GET",
-              "orig": "/flags",
-              "segments": [
-                {
-                  "lit": "flags"
-                }
               ],
-              "select": {
-                "exist": [
-                  "context",
-                  "project_id",
-                  "token"
-                ]
-              },
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.flags`"
               },
-              "parts": [
-                "flags"
-              ]
+              "args": {
+                "query": [
+                  {
+                    "name": "project_id",
+                    "orig": "project_id",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  },
+                  {
+                    "name": "token",
+                    "orig": "token",
+                    "type": "`$STRING`",
+                    "kind": "query"
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "project_id",
+                  "token"
+                ]
+              }
             }
           ]
         }

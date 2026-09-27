@@ -22,6 +22,7 @@ import {
   jsProp, envName, envToken,
   jsKey,
   pointParts,
+  hasLiveScenarios,
 } from '@voxgig/sdkgen'
 
 
@@ -52,16 +53,6 @@ const TestDirect = cmp(function TestDirect(props: any) {
       apikey: env.${PROJECTNAME}_APIKEY,`
     : ''
 
-  // A templated server URL (OpenAPI server variables) makes a LIVE client
-  // impossible to construct without values: makeOptions raises rather than
-  // request a URL with a literal `{account_id}` in it. Taken from the
-  // environment, the same way the apikey is.
-  //
-  // Keys are quoted and the env read is bracketed via jsKey/jsProp: a server
-  // variable name is spec-derived and need not be a JS identifier — the URL
-  // grammar admits a leading digit ({2fa}), and a declared-but-unreferenced
-  // variable ({edge-zone}) is not constrained at all. Bare `name:` and
-  // `env.PROJ_SERVER_EDGE-ZONE` are both syntax errors.
   const svars = serverVariables(model)
   const serverEnvEntry = svars
     .map((v: any) => `\n    '${serverVarEnv(PROJECTNAME, v.name)}': ${JSON.stringify(v.dflt)},`).join('')
@@ -96,7 +87,7 @@ const TestDirect = cmp(function TestDirect(props: any) {
 
         Slot({ name: 'directSetup' }, () => {
           Content(`
-function liveScenariosActive() { return ${Object.values(model.main.kit.entity || {}).some((e: any) => Object.values(e.op || {}).some((o: any) => (o.points || []).some((p: any) => p.contract && JSON.parse(p.contract.json).live)))} && process.env.${PROJECTNAME}_TEST_LIVE === 'TRUE' }
+function liveScenariosActive() { return ${hasLiveScenarios(model)} && process.env.${PROJECTNAME}_TEST_LIVE === 'TRUE' }
 function directSetup(mockres) {
   const calls = []
 
@@ -173,34 +164,34 @@ function generateDirectLoad(model: Model, entity: ModelEntity) {
     return
   }
 
-  const loadParams = loadPoint.args?.params || []
-  const loadPath = normalizePathParams(pointParts(loadPoint), loadParams, loadPoint.rename?.param)
+  const loadParams = loadPoint.g?.params || []
+  const loadPath = normalizePathParams(pointParts(loadPoint), loadParams, loadPoint.r?.param)
 
   // Get list info for live mode bootstrapping
   const listOp = entity.op?.list
   const listPoint = listOp?.points?.[0]
-  const listParams = listPoint?.args?.params || []
-  const listPath = listPoint ? normalizePathParams(pointParts(listPoint), listParams, listPoint.rename?.param) : ''
+  const listParams = listPoint?.g?.params || []
+  const listPath = listPoint ? normalizePathParams(pointParts(listPoint), listParams, listPoint.r?.param) : ''
   const hasList = null != listPoint
 
   // Ancestor params (not 'id') for live mode
-  const ancestorParams = loadParams.filter((p: any) => p.name !== 'id')
+  const ancestorParams = loadParams.filter((p: any) => p.n !== 'id')
 
   const paramAsserts = loadParams.map((p: any, i: number) =>
     '      assert(calls[0].url.includes(\'direct0' + (i + 1) + '\'))\n').join('')
 
   // Build live list params
   const liveListParams = listParams.map((p: any) => {
-    const key = p.name === 'id'
+    const key = p.n === 'id'
       ? entity.name + '01'
-      : p.name.replace(/_id$/, '') + '01'
-    return { name: p.name, key }
+      : p.n.replace(/_id$/, '') + '01'
+    return { name: p.n, key }
   })
 
   // Build live ancestor params for load
   const liveAncestorParams = ancestorParams.map((p: any) => {
-    const key = p.name.replace(/_id$/, '') + '01'
-    return { name: p.name, key }
+    const key = p.n.replace(/_id$/, '') + '01'
+    return { name: p.n, key }
   })
 
   let liveParamsBlock = ''
@@ -226,11 +217,11 @@ ${listParamLines}
       params.id = listData[0].id
 ${ancestorParamLines}
     } else {
-${loadParams.map((p: any, i: number) => `      ${jsProp('params', p.name)} = 'direct0${i + 1}'`).join('\n')}
+${loadParams.map((p: any, i: number) => `      ${jsProp('params', p.n)} = 'direct0${i + 1}'`).join('\n')}
     }`
   } else {
     liveParamsBlock = `    if (!setup.live) {
-${loadParams.map((p: any, i: number) => `      ${jsProp('params', p.name)} = 'direct0${i + 1}'`).join('\n')}
+${loadParams.map((p: any, i: number) => `      ${jsProp('params', p.n)} = 'direct0${i + 1}'`).join('\n')}
     }`
   }
 
@@ -276,15 +267,15 @@ function generateDirectList(model: Model, entity: ModelEntity) {
     return
   }
 
-  const listParams = listPoint.args?.params || []
-  const listPath = normalizePathParams(pointParts(listPoint), listParams, listPoint.rename?.param)
+  const listParams = listPoint.g?.params || []
+  const listPath = normalizePathParams(pointParts(listPoint), listParams, listPoint.r?.param)
 
   // Build live params
   const liveParams = listParams.map((p: any) => {
-    const key = p.name === 'id'
+    const key = p.n === 'id'
       ? entity.name + '01'
-      : p.name.replace(/_id$/, '') + '01'
-    return { name: p.name, key }
+      : p.n.replace(/_id$/, '') + '01'
+    return { name: p.n, key }
   })
 
   const paramAsserts = listParams.map((p: any, i: number) =>
@@ -295,7 +286,7 @@ function generateDirectList(model: Model, entity: ModelEntity) {
     const liveLines = liveParams.map((lp: any) =>
       `      ${jsProp('params', lp.name)} = setup.idmap['${lp.key}']`).join('\n')
     const mockLines = listParams.map((p: any, i: number) =>
-      `      ${jsProp('params', p.name)} = 'direct0${i + 1}'`).join('\n')
+      `      ${jsProp('params', p.n)} = 'direct0${i + 1}'`).join('\n')
 
     paramsBlock = `    const params = {}
     if (setup.live) {
@@ -337,15 +328,15 @@ ${paramAsserts}    }
 
 
 // GraphQL-backed op needs POST+body, not a REST-shaped GET+params direct()
-// call — reuse apidef's own point.graphql.doc via the SDK's graphql() hatch.
+// call — reuse apidef's own point.gq.doc via the SDK's graphql() hatch.
 // Mirrors TestDirect_ts.ts's generateDirectGraphql.
 function generateDirectGraphqlJs(
   opname: 'load' | 'list',
   entity: ModelEntity,
   point: any,
 ) {
-  const doc: string = point.graphql.doc
-  const vars: any[] = point.graphql.vars || []
+  const doc: string = point.gq.doc
+  const vars: any[] = point.gq.vars || []
 
   const mockVarLines = vars.map((v: any, i: number) =>
     `      variables[${JSON.stringify(v.name)}] = 'direct0${i + 1}'`).join('\n')
@@ -389,11 +380,6 @@ ${varAsserts}    }
 }
 
 
-// Replace raw OpenAPI parameter names in path parts with model parameter names.
-// Path parts may have e.g. {subBreed} while model params use sub_breed.
-// When a rename mapping exists (e.g. closureId -> id), path parts contain the
-// renamed form {id} but params still use the original name closure_id.
-// The rename mapping is used to reverse-lookup the original param name.
 function normalizePathParams(
   parts: string[],
   params: any[],
@@ -410,10 +396,10 @@ function normalizePathParams(
       // original name was renamed to another param's current name (e.g. badge
       // load: param 'group_id' has orig 'id', and another param has name 'id').
       const param = params.find((p: any) =>
-          p.name === snaked || p.name === depluralized) ||
+          p.n === snaked || p.n === depluralized) ||
         params.find((p: any) =>
-          p.orig === snaked || p.orig === depluralized)
-      if (param) return '{' + param.name + '}'
+          p.or === snaked || p.or === depluralized)
+      if (param) return '{' + param.n + '}'
 
       // Reverse-lookup through rename mapping: if rawName is a renamed value
       // (e.g. "id"), find the original camelCase key (e.g. "closureId"),
@@ -424,10 +410,10 @@ function normalizePathParams(
             const origSnaked = snakify(origCamel)
             const origDepluralized = depluralize(origSnaked)
             const renamedParam = params.find(
-              (p: any) => p.orig === origSnaked || p.name === origSnaked ||
-                p.orig === origDepluralized || p.name === origDepluralized
+              (p: any) => p.or === origSnaked || p.n === origSnaked ||
+                p.or === origDepluralized || p.n === origDepluralized
             )
-            if (renamedParam) return '{' + renamedParam.name + '}'
+            if (renamedParam) return '{' + renamedParam.n + '}'
           }
         }
       }

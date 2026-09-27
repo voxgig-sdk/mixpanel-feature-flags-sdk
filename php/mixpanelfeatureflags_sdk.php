@@ -341,24 +341,6 @@ class MixpanelFeatureFlagsSDK
     }
 
 
-    private $_definition = null;
-
-    // Canonical facade: $client->Definition()->list() / ->load(["id" => ...]).
-    // PHP method names are case-insensitive, so lowercase $client->definition()
-    // resolves here too.
-    public function Definition($data = null)
-    {
-        require_once __DIR__ . '/entity/definition_entity.php';
-        if ($data === null) {
-            if ($this->_definition === null) {
-                $this->_definition = new DefinitionEntity($this, null);
-            }
-            return $this->_definition;
-        }
-        return new DefinitionEntity($this, $data);
-    }
-
-
     private $_flag = null;
 
     // Canonical facade: $client->Flag()->list() / ->load(["id" => ...]).
@@ -374,6 +356,24 @@ class MixpanelFeatureFlagsSDK
             return $this->_flag;
         }
         return new FlagEntity($this, $data);
+    }
+
+
+    private $_get_flag_definition = null;
+
+    // Canonical facade: $client->GetFlagDefinition()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->get_flag_definition()
+    // resolves here too.
+    public function GetFlagDefinition($data = null)
+    {
+        require_once __DIR__ . '/entity/get_flag_definition_entity.php';
+        if ($data === null) {
+            if ($this->_get_flag_definition === null) {
+                $this->_get_flag_definition = new GetFlagDefinitionEntity($this, null);
+            }
+            return $this->_get_flag_definition;
+        }
+        return new GetFlagDefinitionEntity($this, $data);
     }
 
 

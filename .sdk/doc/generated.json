@@ -1,7 +1,18 @@
 {
+  "version": 2,
+  "roots": [
+    ".github/workflows/docgen.yml",
+    ".sdk/admin/setup-github-pages.sh",
+    ".sdk/doc/generated.json",
+    ".sdk/doc/qa",
+    ".sdk/doc/qa-manifest.json",
+    "SUMMARY.md",
+    "docs"
+  ],
   "files": [
     ".github/workflows/docgen.yml",
     ".sdk/admin/setup-github-pages.sh",
+    ".sdk/doc/generated.json",
     ".sdk/doc/qa-manifest.json",
     ".sdk/doc/qa/STYLE-GUIDE.md",
     ".sdk/doc/qa/pages-job.yml",
@@ -12,8 +23,8 @@
     ".sdk/doc/qa/workflow.yml",
     "SUMMARY.md",
     "docs/.nojekyll",
-    "docs/api/definition.html",
     "docs/api/flag.html",
+    "docs/api/get_flag_definition.html",
     "docs/api/index.html",
     "docs/assets/nunito.woff2",
     "docs/assets/nunito.woff2.license.txt",

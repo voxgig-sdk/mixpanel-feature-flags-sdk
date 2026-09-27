@@ -20,7 +20,7 @@ import (
 const prompt = "mixpanel-feature-flags"
 
 // entitiesHelp is the space-separated entity list shown by /help.
-const entitiesHelp = "definition flag"
+const entitiesHelp = "flag get_flag_definition"
 
 func main() {
 	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))

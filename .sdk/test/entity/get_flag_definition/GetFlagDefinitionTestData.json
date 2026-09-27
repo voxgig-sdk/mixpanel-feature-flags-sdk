@@ -1,0 +1,64 @@
+{
+  "existing": {
+    "get_flag_definition": {
+      "GET_FLAG_DEFINITION00": {
+        "context": "s64",
+        "experiment_id": "EXPERIMENT01",
+        "id": "GET_FLAG_DEFINITION00",
+        "is_experiment_active": false,
+        "key": "s68",
+        "name": "s69",
+        "project_id": "PROJECT01",
+        "ruleset": {},
+        "status": "s6c",
+        "workspace_id": "WORKSPACE01"
+      },
+      "GET_FLAG_DEFINITION01": {
+        "context": "sc8",
+        "experiment_id": "EXPERIMENT01",
+        "id": "GET_FLAG_DEFINITION01",
+        "is_experiment_active": false,
+        "key": "scc",
+        "name": "scd",
+        "project_id": "PROJECT01",
+        "ruleset": {},
+        "status": "sd0",
+        "workspace_id": "WORKSPACE01"
+      },
+      "GET_FLAG_DEFINITION02": {
+        "context": "s12c",
+        "experiment_id": "EXPERIMENT01",
+        "id": "GET_FLAG_DEFINITION02",
+        "is_experiment_active": false,
+        "key": "s130",
+        "name": "s131",
+        "project_id": "PROJECT01",
+        "ruleset": {},
+        "status": "s134",
+        "workspace_id": "WORKSPACE01"
+      }
+    }
+  },
+  "new": {
+    "get_flag_definition": {
+      "get_flag_definition_ref01": {
+        "context": "s190",
+        "experiment_id": "EXPERIMENT01",
+        "is_experiment_active": false,
+        "key": "s194",
+        "name": "s195",
+        "project_id": "PROJECT01",
+        "ruleset": {},
+        "status": "s198",
+        "workspace_id": "WORKSPACE01"
+      }
+    }
+  },
+  "requests": {
+    "GET /flags/definitions": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

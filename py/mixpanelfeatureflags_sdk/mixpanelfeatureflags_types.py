@@ -1,7 +1,7 @@
 # Typed models for the MixpanelFeatureFlags SDK.
 #
-# GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-# params (op.<name>.points[].args.params[]). Field/param types come from the
+# GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+# params (op.<name>.points[].g.params[]). Field/param types come from the
 # canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 # @voxgig/apidef VALID_CANON). Do not edit by hand.
 #
@@ -14,27 +14,6 @@
 from __future__ import annotations
 
 from typing import TypedDict, Any
-
-
-class DefinitionRequired(TypedDict):
-    context: str
-    id: str
-    key: str
-    name: str
-    project_id: int
-    ruleset: dict
-    status: str
-    workspace_id: int
-
-
-class Definition(DefinitionRequired, total=False):
-    experiment_id: str
-    is_experiment_active: bool
-
-
-class DefinitionListMatch(TypedDict, total=False):
-    project_id: str
-    token: str
 
 
 class FlagRequired(TypedDict):
@@ -53,5 +32,26 @@ class FlagLoadMatchRequired(TypedDict):
 
 
 class FlagLoadMatch(FlagLoadMatchRequired, total=False):
+    project_id: str
+    token: str
+
+
+class GetFlagDefinitionRequired(TypedDict):
+    context: str
+    id: str
+    key: str
+    name: str
+    project_id: int
+    ruleset: dict
+    status: str
+    workspace_id: int
+
+
+class GetFlagDefinition(GetFlagDefinitionRequired, total=False):
+    experiment_id: str
+    is_experiment_active: bool
+
+
+class GetFlagDefinitionListMatch(TypedDict, total=False):
     project_id: str
     token: str
